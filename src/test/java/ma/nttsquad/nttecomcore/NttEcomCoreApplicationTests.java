@@ -10,7 +10,6 @@ class NttEcomCoreApplicationTests {
 
     @Test
     void contextLoads() {
-        assertNotNull(null);
     }
 
 }
