@@ -5,12 +5,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/product")
+@RequestMapping("/products")
 public class ProductCtrl {
 
     @GetMapping(value={"/",""})
     public String test(){
         return "test Prodcut Controller";
     }
+
 
 }
