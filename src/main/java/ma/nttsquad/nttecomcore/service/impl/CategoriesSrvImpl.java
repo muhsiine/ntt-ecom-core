@@ -1,5 +1,6 @@
 package ma.nttsquad.nttecomcore.service.impl;
 
+import ma.nttsquad.nttecomcore.CategoriesMapper;
 import ma.nttsquad.nttecomcore.dto.CategoryDto;
 import ma.nttsquad.nttecomcore.model.Category;
 import ma.nttsquad.nttecomcore.repository.CategoryDao;
@@ -22,12 +23,8 @@ public class CategoriesSrvImpl implements CategoriesSrv {
 
     @Override
     public List<CategoryDto> getAllCategories() {
-        return categoryDao.findAll().stream().map(category ->
-                CategoryDto
-                        .builder()
-                        .categoryId(category.getCategoryId())
-                        .name(category.getName())
-                        .build()
+        return categoryDao.findAll().stream()
+                .map(CategoriesMapper.INSTANCE::entityToDto
         ).collect(Collectors.toList());
 
     }
