@@ -2,19 +2,54 @@ package ma.nttsquad.nttecomcore.model;
 
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
-@Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
+@Setter
+@ToString
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long productId;
+
+    @NotNull(message = "Product name is required.")
+    @Basic(optional = false)
     private String name;
 
+    private String description;
+
+    private Double price;
+
+    @OneToMany(mappedBy = "product")
+    private List<ProductImage> images;
+
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    private Category category;
+
+    private Integer nmAvailableItems;
+
+    private LocalDateTime createdAt;
+
+    private LocalDateTime modifiedAt;
+
+    private LocalDateTime deletedAt;
+
+
+
+
+
+
 }
+
+
+
+
+
+

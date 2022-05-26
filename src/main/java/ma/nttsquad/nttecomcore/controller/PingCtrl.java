@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class PingCtrl {
 
     @GetMapping("/ping")
-    public String ping(){
+    public String ping() {
         return "Hello Squad";
     }
 }
