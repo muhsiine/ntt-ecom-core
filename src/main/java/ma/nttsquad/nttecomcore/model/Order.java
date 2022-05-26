@@ -29,7 +29,8 @@ public class Order {
     private Status status;
 
     @OneToMany(mappedBy = "order")
-    @ToString.Exclude List<OrderItem> orderItems;
+    @ToString.Exclude
+    List<OrderItem> orderItems;
 
     private LocalDateTime createdAt;
 

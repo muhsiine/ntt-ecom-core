@@ -14,7 +14,7 @@ public class Address {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long addressId;
-    private Long addressDesc;
+    private String addressDesc;
     private String zipCode;
 
     @ManyToOne
