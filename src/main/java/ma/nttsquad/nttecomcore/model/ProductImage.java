@@ -15,7 +15,7 @@ import javax.persistence.*;
 public class ProductImage {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long imageId;
+    private Long id;
     private String imageUrl;
 
     @ManyToOne

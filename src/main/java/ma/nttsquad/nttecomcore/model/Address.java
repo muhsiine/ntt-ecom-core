@@ -13,11 +13,15 @@ import javax.persistence.*;
 public class Address {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long addressId;
+    private Long id;
     private String addressDesc;
     private String zipCode;
 
     @ManyToOne
     @JoinColumn(name = "city_id")
     private City city;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 }

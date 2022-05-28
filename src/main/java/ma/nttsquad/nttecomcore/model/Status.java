@@ -17,6 +17,6 @@ public class Status {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long statusId;
+    private Long id;
     private String statusDesc;
 }

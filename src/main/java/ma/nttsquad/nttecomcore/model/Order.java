@@ -17,7 +17,7 @@ public class Order {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long orderId;
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "address_id")
@@ -35,6 +35,10 @@ public class Order {
     private LocalDateTime createdAt;
 
     private LocalDateTime modifiedAt;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
 
 }
