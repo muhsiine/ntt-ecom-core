@@ -20,4 +20,8 @@ public class Address {
     @ManyToOne
     @JoinColumn(name = "city_id")
     private City city;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 }

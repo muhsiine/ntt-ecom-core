@@ -36,5 +36,9 @@ public class Order {
 
     private LocalDateTime modifiedAt;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
 
 }
