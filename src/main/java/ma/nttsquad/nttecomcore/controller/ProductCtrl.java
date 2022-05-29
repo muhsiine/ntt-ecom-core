@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import ma.nttsquad.nttecomcore.dto.ProductDto;
 import ma.nttsquad.nttecomcore.model.Category;
+import ma.nttsquad.nttecomcore.exception.NttNotFoundException;
 import ma.nttsquad.nttecomcore.model.Product;
 import ma.nttsquad.nttecomcore.repository.ProductRepository;
 import ma.nttsquad.nttecomcore.service.ProductSrv;
