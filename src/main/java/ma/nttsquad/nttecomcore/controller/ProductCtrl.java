@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
+import ma.nttsquad.nttecomcore.exception.NttNotFoundException;
 import ma.nttsquad.nttecomcore.model.Category;
 import ma.nttsquad.nttecomcore.model.Product;
 import ma.nttsquad.nttecomcore.repository.ProductRepository;
@@ -46,7 +47,7 @@ public class ProductCtrl {
     public Product getProductById(@PathVariable("id") Long productId){
         log.info("Id: {}", productId);
         return productRepository.findById(productId)
-                .orElseThrow( () -> new RuntimeException("Product with id: '" + productId + "' not found!"));
+                .orElseThrow( () -> new NttNotFoundException("Product with id: '%d' not found!".formatted(productId)));
     }
 
     @Operation(summary = "Find Product by Category Id", description = "Find Product by Category Id", tags = "Product")
