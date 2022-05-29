@@ -1,6 +1,7 @@
 package ma.nttsquad.nttecomcore.repository;
 
-import ma.nttsquad.nttecomcore.model.Order;
+import ma.nttsquad.nttecomcore.dto.ProductImageDto;
+import ma.nttsquad.nttecomcore.model.Product;
 import ma.nttsquad.nttecomcore.model.ProductImage;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -8,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface OrderRepository extends JpaRepository<Order, Long> {
+public interface ProductImageRepository extends JpaRepository<ProductImage, Long> {
 
-    List<Order> findByUserId(Long userId);
+    List<ProductImage> findByProductId(Long productId);
 }
