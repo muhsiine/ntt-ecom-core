@@ -5,7 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -13,16 +13,12 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ProductDto {
+public class OrderDto {
     private Long id;
-    @NotNull(message = "Product name is required.")
-    private String name;
-    private String description;
-    private Double price;
-    private List<ProductImageDto> images;
-    private CategoryDto category;
-    private Integer nmAvailableItems;
+    private AddressDto address;
+    private StatusDto status;
+    private List<OrderItemDto> orderItems;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
-    private LocalDateTime deletedAt;
+    private UserDto user;
 }

@@ -8,9 +8,13 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
+import ma.nttsquad.nttecomcore.dto.ProductDto;
 import ma.nttsquad.nttecomcore.model.Category;
+import ma.nttsquad.nttecomcore.exception.NttNotFoundException;
 import ma.nttsquad.nttecomcore.model.Product;
 import ma.nttsquad.nttecomcore.repository.ProductRepository;
+import ma.nttsquad.nttecomcore.service.ProductSrv;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,11 +25,8 @@ import java.util.List;
 @Tag(name = "Product", description = "The Products API")
 public class ProductCtrl {
 
-    private final ProductRepository productRepository;
-
-    public ProductCtrl(ProductRepository productRepository) {
-        this.productRepository = productRepository;
-    }
+    @Autowired
+    private ProductSrv productSrv;
 
     @Operation(summary = "Find all Products", description = "Find all Products", tags = "Product")
     @ApiResponses(value = {
@@ -33,8 +34,9 @@ public class ProductCtrl {
             @ApiResponse(responseCode = "400", description = "Bad request", content = @Content(schema = @Schema(description = "HTTP status error code", example = "400")))
     })
     @GetMapping(value={"/all"})
-    public List<Product> getAllProducts(){
-        return productRepository.findAll();
+    public List<ProductDto> getAllProducts(){
+
+        return productSrv.getAllProducts();
     }
 
     @Operation(summary = "Find Product by Id", description = "Find Product by Id", tags = "Product")
@@ -43,10 +45,9 @@ public class ProductCtrl {
             @ApiResponse(responseCode = "400", description = "Bad request", content = @Content(schema = @Schema(description = "HTTP status error code", example = "400")))
     })
     @GetMapping("/{id}")
-    public Product getProductById(@PathVariable("id") Long productId){
+    public ProductDto getProductById(@PathVariable("id") Long productId){
         log.info("Id: {}", productId);
-        return productRepository.findById(productId)
-                .orElseThrow( () -> new RuntimeException("Product with id: '" + productId + "' not found!"));
+        return productSrv.getProductById(productId);
     }
 
     @Operation(summary = "Find Product by Category Id", description = "Find Product by Category Id", tags = "Product")
@@ -55,8 +56,8 @@ public class ProductCtrl {
             @ApiResponse(responseCode = "400", description = "Bad request", content = @Content(schema = @Schema(description = "HTTP status error code", example = "400")))
     })
     @GetMapping("/category/{id}")
-    public List<Product> getProductByCategoryId(@PathVariable("id") Long categoryId){
-        return productRepository.findByCategoryId(categoryId);
+    public List<ProductDto> getProductByCategoryId(@PathVariable("id") Long categoryId){
+        return productSrv.getProductByCategoryId(categoryId);
     }
 
     @Operation(summary = "Save Product", description = "Save Product", tags = "Product")
@@ -65,8 +66,8 @@ public class ProductCtrl {
             @ApiResponse(responseCode = "400", description = "Bad request", content = @Content(schema = @Schema(description = "HTTP status error code", example = "400")))
     })
     @PostMapping("/save")
-    public void saveProduct(@RequestBody Product product){
-        productRepository.save(product);
+    public void saveProduct(@RequestBody ProductDto productDto){
+        productSrv.saveProduct(productDto);
     }
 
 }
