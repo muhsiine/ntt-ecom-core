@@ -2,12 +2,12 @@ package ma.nttsquad.nttecomcore.service.impl;
 
 import ma.nttsquad.nttecomcore.dto.ProductDto;
 import ma.nttsquad.nttecomcore.mapper.ProductMapper;
-import ma.nttsquad.nttecomcore.mapper.ProductsMapper;
 import ma.nttsquad.nttecomcore.repository.ProductRepository;
 import ma.nttsquad.nttecomcore.service.ProductSrv;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -43,17 +43,10 @@ public class ProductSrvImpl implements ProductSrv {
     }
 
     @Override
-    public List<ProductDto> filter(String productName) {
-        log.info("Product name: {}", productName);
-        return productRepository.filter(productName).stream()
-                .map(ProductsMapper.INSTANCE::entityToDto)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<ProductDto> findByName(String name) {
-        return productRepository.findByName(name).stream()
-                .map(ProductsMapper.INSTANCE::entityToDto)
+    public List<ProductDto> filter(String name, String description, LocalDateTime initialDate, LocalDateTime endDate,
+                                   Long categoryId, Double price1, Double price2) {
+        return productRepository.filter(name, description, initialDate, endDate, categoryId, price1, price2).stream()
+                .map(ProductMapper.INSTANCE::entityToDto)
                 .collect(Collectors.toList());
     }
 }

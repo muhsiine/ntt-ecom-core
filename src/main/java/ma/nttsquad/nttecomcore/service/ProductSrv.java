@@ -1,9 +1,8 @@
 package ma.nttsquad.nttecomcore.service;
 
 import ma.nttsquad.nttecomcore.dto.ProductDto;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface ProductSrv {
@@ -16,8 +15,7 @@ public interface ProductSrv {
 
     void saveProduct(ProductDto productDto);
 
-    List<ProductDto> filter(String productName);
-
-    List<ProductDto> findByName(String name);
+    List<ProductDto> filter(String name, String description, LocalDateTime initialDate, LocalDateTime endDate,
+                            Long categoryId, Double price1, Double price2);
 
 }

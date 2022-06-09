@@ -14,20 +14,14 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     List<Product> findByCategoryId(Long categoryId);
 
-    List<Product> findByName(String name);
+    @Query(value = "FROM Product p WHERE (UPPER(p.name) LIKE UPPER(CONCAT('%',:name,'%')))" +
+            "OR UPPER(p.description) LIKE UPPER(CONCAT('%',:description,'%')) " +
+            "OR p.createdAt BETWEEN :initialDate AND :endDate OR  p.category.id = :categoryId OR p.price >= :price1 AND p.price <= :price2 " +
+            "OR(:name IS NULL AND :description IS NULL AND :initialDate IS NULL AND :endDate IS NULL AND :categoryId IS NULL " +
+            "AND :price1 IS NULL AND :price2 IS NULL)")
+    List<Product> filter(@Param("name") String name, @Param("description") String description,
+                         @Param("initialDate") LocalDateTime initialDate, @Param("endDate") LocalDateTime endDate,
+                         @Param("categoryId") Long categoryId, @Param("price1") Double price1,
+                         @Param("price2") Double price2);
 
-    @Query(value = "FROM Product p WHERE UPPER(p.name) LIKE UPPER(CONCAT('%',:productName,'%')) OR :productName IS NULL")
-    List<Product> filter(@Param("productName") String productName);
-
-    @Query(value = "FROM Product p WHERE UPPER(p.description) LIKE UPPER(CONCAT('%',:productDescription,'%'))")
-    List<Product> findProductsByDescription(@Param("productDescription") String productDescription);
-
-    @Query(value = "FROM Product p WHERE p.createdAt BETWEEN :initialDate AND :endDate")
-    List<Product> findProductsByDate(@Param("initialDate") LocalDateTime initialdate, @Param("endDate") LocalDateTime endDate);
-
-    @Query(value = "FROM Product p WHERE p.category.id = :categoryId")
-    List<Product> findProductsByCategory(@Param("categoryId") Integer categoryId);
-
-    @Query(value = "FROM Product p WHERE p.price >= :price1 AND p.price <= :price2")
-    List<Product> findProductByPrice(@Param("price1") Double price1, @Param("price2") Double price2);
 }
