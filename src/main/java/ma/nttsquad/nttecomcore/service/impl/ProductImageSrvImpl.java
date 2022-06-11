@@ -2,7 +2,7 @@ package ma.nttsquad.nttecomcore.service.impl;
 
 import ma.nttsquad.nttecomcore.dto.ProductImageDto;
 import ma.nttsquad.nttecomcore.mapper.ProductImageMapper;
-import ma.nttsquad.nttecomcore.repository.ProductImageRepository;
+import ma.nttsquad.nttecomcore.model.repository.ProductImageRepository;
 import ma.nttsquad.nttecomcore.service.ProductImageSrv;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

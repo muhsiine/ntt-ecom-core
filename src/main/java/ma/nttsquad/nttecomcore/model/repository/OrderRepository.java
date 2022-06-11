@@ -1,4 +1,4 @@
-package ma.nttsquad.nttecomcore.repository;
+package ma.nttsquad.nttecomcore.model.repository;
 
 import ma.nttsquad.nttecomcore.model.Order;
 import ma.nttsquad.nttecomcore.model.ProductImage;
