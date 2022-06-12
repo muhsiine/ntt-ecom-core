@@ -2,7 +2,7 @@ package ma.nttsquad.nttecomcore.service.impl;
 
 import ma.nttsquad.nttecomcore.dto.OrderDto;
 import ma.nttsquad.nttecomcore.mapper.OrderMapper;
-import ma.nttsquad.nttecomcore.repository.OrderRepository;
+import ma.nttsquad.nttecomcore.model.repository.OrderRepository;
 import ma.nttsquad.nttecomcore.service.OrderSrv;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

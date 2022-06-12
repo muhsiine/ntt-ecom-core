@@ -4,6 +4,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -30,7 +31,7 @@ public class Order {
 
     @OneToMany(mappedBy = "order")
     @ToString.Exclude
-    List<OrderItem> orderItems;
+    List<OrderItem> orderItems = new ArrayList<>();
 
     private LocalDateTime createdAt;
 

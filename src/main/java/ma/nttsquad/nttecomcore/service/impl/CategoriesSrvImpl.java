@@ -2,7 +2,7 @@ package ma.nttsquad.nttecomcore.service.impl;
 
 import ma.nttsquad.nttecomcore.mapper.CategoriesMapper;
 import ma.nttsquad.nttecomcore.dto.CategoryDto;
-import ma.nttsquad.nttecomcore.repository.CategoryRepository;
+import ma.nttsquad.nttecomcore.model.repository.CategoryRepository;
 import ma.nttsquad.nttecomcore.service.CategoriesSrv;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

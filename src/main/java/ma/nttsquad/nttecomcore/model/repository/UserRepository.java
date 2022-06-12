@@ -1,4 +1,4 @@
-package ma.nttsquad.nttecomcore.repository;
+package ma.nttsquad.nttecomcore.model.repository;
 
 import ma.nttsquad.nttecomcore.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;

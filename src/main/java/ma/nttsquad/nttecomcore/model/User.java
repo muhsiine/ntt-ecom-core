@@ -3,6 +3,7 @@ package ma.nttsquad.nttecomcore.model;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -25,6 +26,6 @@ public class User {
     private String imageUrl;
 
     @OneToMany(mappedBy = "user")
-    @ToString.Exclude private List<Address> addresses;
+    @ToString.Exclude private List<Address> addresses = new ArrayList<>();
 
 }
