@@ -11,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import ma.nttsquad.nttecomcore.dto.CartDto;
 import ma.nttsquad.nttecomcore.dto.CartItemDto;
-import ma.nttsquad.nttecomcore.model.Order;
 import ma.nttsquad.nttecomcore.service.CartSrv;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,9 +25,9 @@ public class CartCtrl {
 
     final CartSrv cartSrv;
 
-    @Operation(summary = "Find all carts", description = "Find all carts", tags = "Order")
+    @Operation(summary = "Find all carts", description = "Find all carts", tags = "Cart")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "successful operation", content = @Content(array = @ArraySchema(schema = @Schema(implementation = Order.class)))),
+            @ApiResponse(responseCode = "200", description = "successful operation", content = @Content(array = @ArraySchema(schema = @Schema(implementation = CartDto.class)))),
             @ApiResponse(responseCode = "400", description = "Bad request", content = @Content(schema = @Schema(description = "HTTP status error code", example = "400")))
     }
     )
@@ -37,9 +36,9 @@ public class CartCtrl {
         return cartSrv.getAllCarts();
     }
 
-    @Operation(summary = "Find user cart", description = "Find user cart", tags = "Order")
+    @Operation(summary = "Find user cart", description = "Find user cart", tags = "Cart")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "successful operation", content = @Content(array = @ArraySchema(schema = @Schema(implementation = Order.class)))),
+            @ApiResponse(responseCode = "200", description = "successful operation", content = @Content(array = @ArraySchema(schema = @Schema(implementation = CartDto.class)))),
             @ApiResponse(responseCode = "400", description = "Bad request", content = @Content(schema = @Schema(description = "HTTP status error code", example = "400")))
     }
     )
@@ -48,21 +47,21 @@ public class CartCtrl {
         return cartSrv.getCartByUser(user_id);
     }
 
-    @Operation(summary = "Find cart items of cart", description = "Find cart items of cart", tags = "Order")
+    @Operation(summary = "Find cart items of cart", description = "Find cart items of cart", tags = "Cart")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "successful operation", content = @Content(array = @ArraySchema(schema = @Schema(implementation = Order.class)))),
+            @ApiResponse(responseCode = "200", description = "successful operation", content = @Content(array = @ArraySchema(schema = @Schema(implementation = CartDto.class)))),
             @ApiResponse(responseCode = "400", description = "Bad request", content = @Content(schema = @Schema(description = "HTTP status error code", example = "400")))
     }
     )
-    @GetMapping("/{cart_id}/cartItems")
-    public List<CartItemDto> getCartItemsByCartId(@PathVariable(name = "cart_id") Long cart_id){
-        log.trace("{}", cart_id);
-        return cartSrv.getCartItemsByCartId(cart_id);
+    @GetMapping("/{cartId}/cartItems")
+    public List<CartItemDto> getCartItemsByCartId(@PathVariable(name = "cartId") Long cartId){
+        log.trace("{}", cartId);
+        return cartSrv.getCartItemsByCartId(cartId);
     }
 
-    @Operation(summary = "add new Cart", description = "Add New Cart", tags = "Order")
+    @Operation(summary = "add new Cart", description = "Add New Cart", tags = "Cart")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "successful operation", content = @Content(array = @ArraySchema(schema = @Schema(implementation = Order.class)))),
+            @ApiResponse(responseCode = "200", description = "successful operation", content = @Content(array = @ArraySchema(schema = @Schema(implementation = CartDto.class)))),
             @ApiResponse(responseCode = "400", description = "Bad request", content = @Content(schema = @Schema(description = "HTTP status error code", example = "400")))
     }
     )
@@ -72,27 +71,29 @@ public class CartCtrl {
         cartSrv.saveCart(cartDto);
     }
 
-    @Operation(summary = "add items to Cart", description = "Add items to Cart", tags = "Order")
+    @Operation(summary = "add items to Cart", description = "Add items to Cart", tags = "Cart")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "successful operation", content = @Content(array = @ArraySchema(schema = @Schema(implementation = Order.class)))),
+            @ApiResponse(responseCode = "200", description = "successful operation", content = @Content(array = @ArraySchema(schema = @Schema(implementation = CartDto.class)))),
             @ApiResponse(responseCode = "400", description = "Bad request", content = @Content(schema = @Schema(description = "HTTP status error code", example = "400")))
     }
     )
-    @PostMapping("/cartItems/add/{cart_id}")
-    public void addItemsToCart(@RequestBody List<CartItemDto> cartItems, @PathVariable(name = "cart_id") Long cart_id){
-        log.trace("{}", cartItems, cart_id);
-        cartSrv.addItemsToCart(cartItems, cart_id);
+
+    @PostMapping("/{cartId}/add/cartItems/")
+    public void addItemsToCart(@RequestBody List<CartItemDto> cartItems, @PathVariable(name = "cartId") Long cartId){
+        log.trace("{},{}", cartItems, cartId);
+        cartSrv.addItemsToCart(cartItems, cartId);
     }
 
-    @Operation(summary = "remove items from Cart", description = "remove items from Cart", tags = "Order")
+    @Operation(summary = "remove items from Cart", description = "remove items from Cart", tags = "Cart")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "successful operation", content = @Content(array = @ArraySchema(schema = @Schema(implementation = Order.class)))),
+            @ApiResponse(responseCode = "200", description = "successful operation", content = @Content(array = @ArraySchema(schema = @Schema(implementation = CartDto.class)))),
             @ApiResponse(responseCode = "400", description = "Bad request", content = @Content(schema = @Schema(description = "HTTP status error code", example = "400")))
     }
     )
-    @PostMapping("/removeItems/{cart_id}/{cartItem_id}")
-    public void removeItemsFromCart(@PathVariable(name = "cart_id") Long cart_id, @PathVariable(name = "cartItem_id") Long cartItem_id){
-        log.trace("{}", cart_id, cartItem_id);
-        cartSrv.removeItemsFromCard(cart_id, cartItem_id);
+
+    @PostMapping("/{cartId}/remove/cartItems")
+    public void removeItemsFromCart(@PathVariable(name = "cartId") Long cartId, @RequestBody List<Long> cartItemsId){
+        log.trace("{}", cartId);
+        cartSrv.removeItemsFromCart(cartId, cartItemsId);
     }
 }

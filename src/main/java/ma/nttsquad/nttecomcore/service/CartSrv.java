@@ -3,7 +3,6 @@ package ma.nttsquad.nttecomcore.service;
 
 import ma.nttsquad.nttecomcore.dto.CartDto;
 import ma.nttsquad.nttecomcore.dto.CartItemDto;
-import ma.nttsquad.nttecomcore.model.CartItem;
 
 import java.util.List;
 
@@ -21,6 +20,6 @@ public interface CartSrv {
 
     void addItemsToCart(List<CartItemDto> cartItems, Long cart_id);
 
-    void removeItemsFromCard(Long cart_id, Long cartItem_id);
+    void removeItemsFromCart(Long cart_id, List<Long> cartItem_id);
 
 }

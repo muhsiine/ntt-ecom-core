@@ -1,13 +1,14 @@
 package ma.nttsquad.nttecomcore.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Entity
-@Data
+@Getter
+@Setter
+@ToString
+@AllArgsConstructor
 @NoArgsConstructor
 public class CartItem {
     @Id
@@ -16,7 +17,6 @@ public class CartItem {
 
     @ManyToOne
     @JoinColumn(name = "cart_id")
-    @JsonIgnore
     Cart cart;
 
     @ManyToOne
@@ -24,7 +24,6 @@ public class CartItem {
     Product product;
 
     @Column(nullable = false)
-    private Long quantity;
-
+    private Integer quantity;
 
 }

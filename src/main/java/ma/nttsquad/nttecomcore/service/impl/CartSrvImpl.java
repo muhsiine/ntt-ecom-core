@@ -4,17 +4,14 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import ma.nttsquad.nttecomcore.dto.CartDto;
 import ma.nttsquad.nttecomcore.dto.CartItemDto;
+import ma.nttsquad.nttecomcore.exception.NttNotFoundException;
 import ma.nttsquad.nttecomcore.mapper.CartMapper;
-import ma.nttsquad.nttecomcore.model.CartItem;
+import ma.nttsquad.nttecomcore.model.repository.CartItemRepository;
 import ma.nttsquad.nttecomcore.model.repository.CartRepository;
 import ma.nttsquad.nttecomcore.service.CartSrv;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -22,7 +19,8 @@ import java.util.stream.Collectors;
 @Service
 public class CartSrvImpl implements CartSrv {
 
-    final CartRepository cartRepository;
+    private final CartRepository cartRepository;
+    private final CartItemRepository cartItemRepository;
 
     @Override
     public List<CartDto> getAllCarts() {
@@ -35,26 +33,25 @@ public class CartSrvImpl implements CartSrv {
     @Override
     public CartDto getCartByUser(Long user_id) {
         log.trace("{}", user_id);
-        return CartMapper.INSTANCE.entityToDto(cartRepository.getCartByUser(user_id));
+        return cartRepository.findCartByUserId(user_id)
+                .map(CartMapper.INSTANCE::entityToDto)
+                .orElseThrow(() -> new NttNotFoundException("There's no cart belonging the user with the id '%d'".formatted(user_id)));
     }
 
     @Override
     public CartDto getCartById(Long id) {
         log.trace("{}", id);
-        return CartMapper.INSTANCE.entityToDto(cartRepository.getById(id));
+
+        return cartRepository.findById(id)
+                .map(CartMapper.INSTANCE::entityToDto)
+                .orElseThrow(() -> new NttNotFoundException("There's no cart with the id '%d'".formatted(id)));
     }
 
     @Override
-    public List<CartItemDto> getCartItemsByCartId(Long cart_id) {
-        log.trace("{}", cart_id);
-        CartDto cart = getCartById(cart_id);
-        List<CartItemDto> listCartItems = new ArrayList<>();
-        if(cart != null){
-            listCartItems = cart.getCartItems()
-                    .stream()
-                    .collect(Collectors.toList());
-        }
-        return listCartItems;
+    public List<CartItemDto> getCartItemsByCartId(Long cartId) {
+        log.trace("{}", cartId);
+        CartDto cartDto = getCartById(cartId);
+        return cartDto.getCartItems();
     }
 
     @Override
@@ -66,16 +63,14 @@ public class CartSrvImpl implements CartSrv {
     @Override
     public void addItemsToCart(List<CartItemDto> cartItems, Long cart_id) {
         log.trace("{}:{}", cartItems, cart_id);
-        CartDto cart = getCartById(cart_id);
-        cart.setCartItems(cartItems);
+        CartDto cartDto = getCartById(cart_id);
+        cartDto.getCartItems()
+                .addAll(cartItems);
+        cartRepository.save(CartMapper.INSTANCE.dtoToEntity(cartDto));
     }
 
     @Override
-    public void removeItemsFromCard(Long cart_id, Long cartItem_id) {
-        log.trace("{}:{}", cart_id, cartItem_id);
-        CartDto cart = getCartById(cart_id);
-        if(!CollectionUtils.isEmpty(cart.getCartItems())){
-            cart.getCartItems().removeIf(cartItem -> cartItem.getId().equals(cartItem_id));
-        }
+    public void removeItemsFromCart(Long cartId, List<Long> cartItemsId) {
+        cartItemRepository.deleteAllById(cartItemsId);
     }
 }
