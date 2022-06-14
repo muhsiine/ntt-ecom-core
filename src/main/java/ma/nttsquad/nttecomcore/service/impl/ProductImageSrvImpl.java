@@ -1,20 +1,19 @@
 package ma.nttsquad.nttecomcore.service.impl;
 
+import lombok.RequiredArgsConstructor;
 import ma.nttsquad.nttecomcore.dto.ProductImageDto;
 import ma.nttsquad.nttecomcore.mapper.ProductImageMapper;
 import ma.nttsquad.nttecomcore.model.repository.ProductImageRepository;
 import ma.nttsquad.nttecomcore.service.ProductImageSrv;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class ProductImageSrvImpl implements ProductImageSrv {
 
-    @Autowired
-    private ProductImageRepository productImageRepository;
+    final ProductImageRepository productImageRepository;
 
 
     @Override
@@ -22,6 +21,6 @@ public class ProductImageSrvImpl implements ProductImageSrv {
         return productImageRepository.findByProductId(productId)
                 .stream()
                 .map(ProductImageMapper.INSTANCE::entityToDto)
-                .collect(Collectors.toList());
+                .toList();
     }
 }

@@ -27,7 +27,7 @@ public class CartSrvImpl implements CartSrv {
         return cartRepository.findAll()
                 .stream()
                 .map(CartMapper.INSTANCE::entityToDto)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Override

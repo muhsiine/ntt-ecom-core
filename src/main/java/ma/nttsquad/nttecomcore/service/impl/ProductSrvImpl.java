@@ -1,39 +1,35 @@
 package ma.nttsquad.nttecomcore.service.impl;
 
+import lombok.RequiredArgsConstructor;
 import ma.nttsquad.nttecomcore.dto.ProductDto;
+import ma.nttsquad.nttecomcore.exception.NttNotFoundException;
 import ma.nttsquad.nttecomcore.mapper.ProductMapper;
 import ma.nttsquad.nttecomcore.model.repository.ProductRepository;
 import ma.nttsquad.nttecomcore.service.ProductSrv;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class ProductSrvImpl implements ProductSrv {
 
-    @Autowired
-    private ProductRepository productRepository;
+    final ProductRepository productRepository;
 
     @Override
     public List<ProductDto> getAllProducts() {
-        return productRepository.findAll().stream()
-                .map(ProductMapper.INSTANCE::entityToDto)
-                .collect(Collectors.toList());
+        return productRepository.findAll().stream().map(ProductMapper.INSTANCE::entityToDto).toList();
     }
 
     @Override
     public ProductDto getProductById(Long productId) {
-        return ProductMapper.INSTANCE
-                .entityToDto(productRepository.findById(productId).get());
+        return ProductMapper.INSTANCE.entityToDto(productRepository.findById(productId)
+                .orElseThrow(() -> new NttNotFoundException("product with id '%d' not found".formatted(productId))));
     }
 
     @Override
     public List<ProductDto> getProductByCategoryId(Long categoryId) {
-        return productRepository.findByCategoryId(categoryId).stream()
-                .map(ProductMapper.INSTANCE::entityToDto)
-                .collect(Collectors.toList());
+        return productRepository.findByCategoryId(categoryId).stream().map(ProductMapper.INSTANCE::entityToDto).toList();
     }
 
     @Override
