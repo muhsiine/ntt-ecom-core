@@ -3,7 +3,7 @@ package ma.nttsquad.nttecomcore.service.impl;
 import ma.nttsquad.nttecomcore.dto.ProductDto;
 import ma.nttsquad.nttecomcore.dto.ProductFilterDto;
 import ma.nttsquad.nttecomcore.mapper.ProductMapper;
-import ma.nttsquad.nttecomcore.repository.ProductRepository;
+import ma.nttsquad.nttecomcore.model.repository.ProductRepository;
 import ma.nttsquad.nttecomcore.service.ProductSrv;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
