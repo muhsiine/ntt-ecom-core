@@ -1,6 +1,7 @@
 package ma.nttsquad.nttecomcore.service;
 
 import ma.nttsquad.nttecomcore.dto.ProductDto;
+import ma.nttsquad.nttecomcore.dto.ProductFilterDto;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -15,7 +16,6 @@ public interface ProductSrv {
 
     void saveProduct(ProductDto productDto);
 
-    List<ProductDto> filter(String name, String description, LocalDateTime initialDate, LocalDateTime endDate,
-                            Long categoryId, Double price1, Double price2);
+    List<ProductDto> filter(ProductFilterDto productFilterDto);
 
 }

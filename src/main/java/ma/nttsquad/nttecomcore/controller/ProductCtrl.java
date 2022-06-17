@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import ma.nttsquad.nttecomcore.dto.ProductDto;
+import ma.nttsquad.nttecomcore.dto.ProductFilterDto;
 import ma.nttsquad.nttecomcore.model.Product;
 import ma.nttsquad.nttecomcore.service.ProductSrv;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,13 +77,7 @@ public class ProductCtrl {
             @ApiResponse(responseCode = "400", description = "Bad request", content = @Content(schema = @Schema(description = "HTTP status error code", example = "400")))
     })
     @GetMapping("/filter")
-    public ResponseEntity<Object> filter(@RequestParam(value = "name", required = false) String name,
-                       @RequestParam(value = "description", required = false) String description,
-                       @RequestParam(value = "price1", required = false) Double price1,
-                       @RequestParam(value = "price2", required = false) Double price2,
-                       @RequestParam(value = "categoryId", required = false) Long categoryId,
-                       @RequestParam(value = "initialDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime initialDate,
-                       @RequestParam(value = "endDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDate){
-        return ResponseEntity.ok(productSrv.filter(name, description, initialDate, endDate, categoryId, price1, price2));
+    public ResponseEntity<Object> filter(@RequestBody ProductFilterDto productFilterDto){
+        return ResponseEntity.ok(productSrv.filter(productFilterDto));
     }
 }
