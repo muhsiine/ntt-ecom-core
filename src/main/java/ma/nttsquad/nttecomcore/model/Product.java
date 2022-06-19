@@ -27,6 +27,7 @@ public class Product {
     private Double price;
 
     @OneToMany(mappedBy = "product")
+    @ToString.Exclude
     private List<ProductImage> images;
 
     @ManyToOne

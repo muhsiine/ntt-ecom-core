@@ -20,16 +20,16 @@ public interface CartMapper {
     Cart dtoToEntity (CartDto cartDto);
 
     @AfterMapping
-    default void addBackReference(@MappingTarget CartDto cartDto){
-        for(CartItemDto cartItemDto: cartDto.getCartItems()){
-            cartItemDto.setCart(cartDto);
+    default void addBackReference(@MappingTarget CartDto.CartDtoBuilder cartDtoBuilder){
+        for(CartItemDto cartItemDto: cartDtoBuilder.build().getCartItems()){
+            cartItemDto.setCart(cartDtoBuilder.build());
         }
     }
 
     @AfterMapping
-    default void addBackReference(@MappingTarget Cart cart){
-        for(CartItem cartItem: cart.getCartItems()){
-            cartItem.setCart(cart);
+    default void addBackReference(@MappingTarget Cart.CartBuilder cartBuilder){
+        for(CartItem cartItem: cartBuilder.build().getCartItems()){
+            cartItem.setCart(cartBuilder.build());
         }
     }
 }

@@ -12,6 +12,7 @@ import javax.persistence.Id;
 @NoArgsConstructor
 @Getter
 @Setter
+@Builder
 @ToString
 public class Country {
     @Id

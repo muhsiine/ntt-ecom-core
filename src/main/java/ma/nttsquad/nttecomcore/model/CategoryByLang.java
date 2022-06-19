@@ -11,6 +11,7 @@ import javax.persistence.*;
 @Setter
 @ToString
 @Entity
+@Builder
 @Table(name = "CATEGORY_X_LANG")
 public class CategoryByLang {
 

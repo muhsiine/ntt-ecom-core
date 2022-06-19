@@ -12,6 +12,7 @@ import java.util.List;
 @Getter
 @Setter
 @ToString
+@Builder
 @Table(name = "cart")
 public class Cart {
 
