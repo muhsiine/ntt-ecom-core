@@ -1,18 +1,17 @@
 package ma.nttsquad.nttecomcore.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
 @Builder
+@ToString
 public class CategoryDto {
 
     private Long id;
-    private String name;
+    private String categoryCode;
+    private String icon;
 
 }
