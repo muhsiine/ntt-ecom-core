@@ -91,7 +91,7 @@ public class CartCtrl {
     }
     )
 
-    @PostMapping("/{cartId}/remove/cartItems")
+    @DeleteMapping("/{cartId}/remove/cartItems")
     public void removeItemsFromCart(@PathVariable(name = "cartId") Long cartId, @RequestBody List<Long> cartItemsId){
         log.trace("{}", cartId);
         cartSrv.removeItemsFromCart(cartId, cartItemsId);
