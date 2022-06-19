@@ -10,7 +10,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import ma.nttsquad.nttecomcore.cons.LangCons;
-import ma.nttsquad.nttecomcore.dto.CategoryLangDto;
+import ma.nttsquad.nttecomcore.dto.CategoryByLangDto;
 import ma.nttsquad.nttecomcore.model.Category;
 import ma.nttsquad.nttecomcore.service.CategoriesSrv;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,7 +35,7 @@ public class CategoryCtrl {
             @ApiResponse(responseCode = "400", description = "Bad request", content = @Content(schema = @Schema(description = "HTTP status error code", example = "400")))
     })
     @GetMapping("/all")
-    public List<CategoryLangDto> getAllCategoriesByLang(@RequestParam("lang") LangCons langCode) {
+    public List<CategoryByLangDto> getAllCategoriesByLang(@RequestParam("lang") LangCons langCode) {
         return categorySrv.getAllCategoriesByLang(langCode);
     }
 }

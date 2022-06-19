@@ -12,7 +12,7 @@ import javax.persistence.*;
 @ToString
 @Entity
 @Table(name = "CATEGORY_X_LANG")
-public class CategoryLang {
+public class CategoryByLang {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
