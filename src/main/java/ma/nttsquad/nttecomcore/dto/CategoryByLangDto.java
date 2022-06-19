@@ -13,9 +13,12 @@ public class CategoryByLangDto {
 
     @JsonIgnore
     private Long id;
-    private LangCons langCode;
-    private String description;
 
+    private Long categoryId;
+
+    private LangCons langCode;
+
+    private String description;
 
     private String categoryCode;
 
