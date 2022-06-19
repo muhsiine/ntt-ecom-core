@@ -13,7 +13,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ProductImageSrvImpl implements ProductImageSrv {
 
-    final ProductImageRepository productImageRepository;
+    private final ProductImageRepository productImageRepository;
 
 
     @Override
