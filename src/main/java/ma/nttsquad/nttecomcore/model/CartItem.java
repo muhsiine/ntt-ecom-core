@@ -1,7 +1,5 @@
 package ma.nttsquad.nttecomcore.model;
 
-
-
 import lombok.*;
 
 import javax.persistence.*;
@@ -12,14 +10,14 @@ import javax.persistence.*;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-public class OrderItem {
+public class CartItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "order_id")
-    Order order;
+    @JoinColumn(name = "cart_id")
+    Cart cart;
 
     @ManyToOne
     @JoinColumn(name = "product_id")
@@ -27,6 +25,5 @@ public class OrderItem {
 
     @Column(nullable = false)
     private Integer quantity;
-
 
 }

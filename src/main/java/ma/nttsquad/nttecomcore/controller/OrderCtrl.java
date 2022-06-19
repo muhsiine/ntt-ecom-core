@@ -9,7 +9,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import ma.nttsquad.nttecomcore.dto.OrderDto;
 import ma.nttsquad.nttecomcore.model.Order;
-import ma.nttsquad.nttecomcore.repository.OrderRepository;
 import ma.nttsquad.nttecomcore.service.OrderSrv;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
