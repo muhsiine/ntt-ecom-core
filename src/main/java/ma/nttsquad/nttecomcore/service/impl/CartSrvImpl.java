@@ -62,15 +62,28 @@ public class CartSrvImpl implements CartSrv {
 
     @Override
     public void addItemsToCart(List<CartItemDto> cartItems, Long cart_id) {
+
+        /* TODO
+           * Check if the Product available in stock with the right quantity
+           * if yes decrement the quantity from the available items in the product and continue with the op
+           * if no throw an exception.
+           * !important this method should be Transactional.
+        */
+
         log.trace("{}:{}", cartItems, cart_id);
         CartDto cartDto = getCartById(cart_id);
         cartDto.getCartItems()
                 .addAll(cartItems);
+
         cartRepository.save(CartMapper.INSTANCE.dtoToEntity(cartDto));
     }
 
     @Override
     public void removeItemsFromCart(Long cartId, List<Long> cartItemsId) {
+        /* TODO
+         * increment the available intems of the products existing in the cartItems
+         * !Important this method should be Transactional.
+         */
         cartItemRepository.deleteAllById(cartItemsId);
     }
 }
