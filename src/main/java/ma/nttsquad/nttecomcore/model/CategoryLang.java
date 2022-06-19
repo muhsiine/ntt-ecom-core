@@ -1,29 +1,30 @@
 package ma.nttsquad.nttecomcore.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
+import ma.nttsquad.nttecomcore.cons.LangCons;
 
 import javax.persistence.*;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
+@Getter
+@Setter
 @ToString
-@Builder
 @Entity
-@Table(name = "languages")
-public class Language {
+@Table(name = "CATEGORY_X_LANG")
+public class CategoryLang {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String langCode;
-    private String label;
+    private String description;
+
+    @Enumerated(EnumType.STRING)
+    private LangCons langCode;
 
     @ManyToOne()
     @JoinColumn(name = "category_id")
-    @JsonIgnore
     private Category category;
 
 }

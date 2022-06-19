@@ -21,7 +21,5 @@ public class Category {
     private String categoryCode;
     private String icon;
 
-    @OneToMany(mappedBy = "category")
-    private List<Language> languages;
 
 }
