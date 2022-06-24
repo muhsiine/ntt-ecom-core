@@ -1,26 +1,27 @@
 package ma.nttsquad.nttecomcore.service.impl;
 
-import ma.nttsquad.nttecomcore.mapper.CategoriesMapper;
-import ma.nttsquad.nttecomcore.dto.CategoryDto;
-import ma.nttsquad.nttecomcore.model.repository.CategoryRepository;
+import lombok.RequiredArgsConstructor;
+import ma.nttsquad.nttecomcore.cons.LangCons;
+import ma.nttsquad.nttecomcore.dto.CategoryByLangDto;
+import ma.nttsquad.nttecomcore.mapper.CategoryByLangMapper;
+import ma.nttsquad.nttecomcore.model.repository.CategoryByLangRepository;
 import ma.nttsquad.nttecomcore.service.CategoriesSrv;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class CategoriesSrvImpl implements CategoriesSrv {
 
-    @Autowired
-    private CategoryRepository categoryRepository;
+    private final CategoryByLangRepository categoryByLangRepository;
 
     @Override
-    public List<CategoryDto> getAllCategories() {
-        return categoryRepository.findAll().stream()
-                .map(CategoriesMapper.INSTANCE::entityToDto
-                ).collect(Collectors.toList());
-
+    public List<CategoryByLangDto> getAllCategoriesByLang(LangCons langCode) {
+        return categoryByLangRepository.findByLangCode(langCode)
+                .stream()
+                .map(CategoryByLangMapper.INSTANCE::entityToDto)
+                .collect(Collectors.toList());
     }
 }
