@@ -64,8 +64,8 @@ public class ProductCtrl {
             @ApiResponse(responseCode = "400", description = "Bad request", content = @Content(schema = @Schema(description = "HTTP status error code", example = "400")))
     })
     @PostMapping("/save")
-    public void saveProduct(@RequestBody ProductDto productDto){
-        productSrv.saveProduct(productDto);
+    public ProductDto saveProduct(@RequestBody ProductDto productDto){
+        return productSrv.saveProduct(productDto);
     }
 
 }

@@ -37,10 +37,7 @@ class CartSrvTest {
     private CartSrv cartSrv;
     private  List<Cart> mockCartList;
     private List<CartItem> mockCartItemList;
-
-    private List<CartItemDto> mockCartItemDtoList;
     private CartItem mockCartItem;
-
     private CartDto mockCartDto;
     private Cart mockCart;
     private Product productMock;
@@ -119,7 +116,12 @@ class CartSrvTest {
 
     @Test
     void saveCart() {
-        cartSrv.saveCart(mockCartDto);
+        when(cartRepository.save(any())).thenReturn(mockCart);
+        CartDto cartDto = cartSrv.saveCart(mockCartDto);
+        assertThat(cartDto)
+                .isNotNull()
+                .extracting("id")
+                .isEqualTo(mockCartDto.getId());
         verify(cartRepository, times(1)).save(any());
     }
 
@@ -127,11 +129,17 @@ class CartSrvTest {
     void addItemsToCart() {
 
         when(cartRepository.findById(1L)).thenReturn(Optional.of(mockCart));
+        when(cartRepository.save(any())).thenReturn(mockCart);
+
 
         List<CartItemDto> cartItemDtoList = cartSrv.getCartItemsByCartId(1L);
         cartItemDtoList.add(new CartItemDto(2L,null,null,8));
 
-        cartSrv.addItemsToCart(cartItemDtoList,1L);
+        CartDto cartDto =cartSrv.addItemsToCart(cartItemDtoList,1L);
+        assertThat(cartDto)
+                .isNotNull()
+                .extracting("id")
+                .isEqualTo(mockCartDto.getId());
 
         verify(cartRepository, times(1)).save(any());
 

@@ -33,7 +33,7 @@ public class ProductSrvImpl implements ProductSrv {
     }
 
     @Override
-    public void saveProduct(ProductDto productDto) {
-        productRepository.save(ProductMapper.INSTANCE.dtoToEntity(productDto));
+    public ProductDto saveProduct(ProductDto productDto) {
+        return ProductMapper.INSTANCE.entityToDto(productRepository.save(ProductMapper.INSTANCE.dtoToEntity(productDto)));
     }
 }

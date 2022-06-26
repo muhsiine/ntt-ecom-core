@@ -36,8 +36,6 @@ class ProductSrvTest {
     //Class under Test
     private  ProductSrv productSrv;
 
-
-
     private Product productMock;
     private ProductDto productDtoMock;
 
@@ -109,8 +107,12 @@ class ProductSrvTest {
 
     @Test
     void saveProduct() {
-
-        productSrv.saveProduct(productDtoMock);
+        when(productRepository.save(any())).thenReturn(productMock);
+        ProductDto productDto = productSrv.saveProduct(productDtoMock);
+        assertThat(productDto)
+                .isNotNull()
+                .extracting("id")
+                .isEqualTo(productDtoMock.getId());
         verify(productRepository, times(1)).save(any());
 
     }
