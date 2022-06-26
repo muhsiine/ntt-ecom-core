@@ -10,7 +10,7 @@ public interface CartSrv {
 
     List<CartDto> getAllCarts();
 
-    CartDto getCartByUser(Long user_id);
+    CartDto getCartByUserId(Long user_id);
 
     CartDto getCartById(Long id);
 

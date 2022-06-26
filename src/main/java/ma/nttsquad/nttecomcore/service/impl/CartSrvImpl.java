@@ -12,15 +12,14 @@ import ma.nttsquad.nttecomcore.service.CartSrv;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Slf4j
 @RequiredArgsConstructor
 @Service
 public class CartSrvImpl implements CartSrv {
 
-    private final CartRepository cartRepository;
-    private final CartItemRepository cartItemRepository;
+    final CartRepository cartRepository;
+    final CartItemRepository cartItemRepository;
 
     @Override
     public List<CartDto> getAllCarts() {
@@ -31,7 +30,7 @@ public class CartSrvImpl implements CartSrv {
     }
 
     @Override
-    public CartDto getCartByUser(Long user_id) {
+    public CartDto getCartByUserId(Long user_id) {
         log.trace("{}", user_id);
         return cartRepository.findCartByUserId(user_id)
                 .map(CartMapper.INSTANCE::entityToDto)

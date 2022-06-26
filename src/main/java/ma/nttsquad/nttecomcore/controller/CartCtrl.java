@@ -43,8 +43,8 @@ public class CartCtrl {
     }
     )
     @GetMapping("/user/{user_id}")
-    public CartDto getCartByUser(@PathVariable(name = "user_id") Long user_id) {
-        return cartSrv.getCartByUser(user_id);
+    public CartDto getCartByUserId(@PathVariable(name = "user_id") Long user_id) {
+        return cartSrv.getCartByUserId(user_id);
     }
 
     @Operation(summary = "Find cart items of cart", description = "Find cart items of cart", tags = "Cart")
