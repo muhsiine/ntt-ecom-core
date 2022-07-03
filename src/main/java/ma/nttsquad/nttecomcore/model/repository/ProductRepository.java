@@ -15,8 +15,8 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     List<Product> findByCategoryId(Long categoryId);
 
-    @Query(value = "FROM Product p WHERE 1 = 1 " +
-            "AND (:#{#productFilterDto.name} IS NULL OR UPPER(p.name) LIKE UPPER(CONCAT('%',:#{#productFilterDto.name},'%'))) " +
+    @Query(value = "FROM Product p WHERE" +
+            "(:#{#productFilterDto.name} IS NULL OR UPPER(p.name) LIKE UPPER(CONCAT('%',:#{#productFilterDto.name},'%'))) " +
             "AND (:#{#productFilterDto.description} IS NULL OR UPPER(p.description) LIKE (UPPER(CONCAT('%',:#{#productFilterDto.description},'%')) ))  " +
             "AND (:#{#productFilterDto.initialDate} IS NULL OR :#{#productFilterDto.endDate} IS NULL OR p.createdAt BETWEEN :#{#productFilterDto.initialDate} AND :#{#productFilterDto.endDate}) " +
             "AND (:#{#productFilterDto.categoryId} IS NULL OR p.category.id = :#{#productFilterDto.categoryId}) " +
