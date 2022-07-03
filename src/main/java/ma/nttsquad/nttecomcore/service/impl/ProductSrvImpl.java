@@ -48,4 +48,9 @@ public class ProductSrvImpl implements ProductSrv {
                 .map(ProductMapper.INSTANCE::entityToDto)
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public Double maxPrice() {
+        return productRepository.maxPrice();
+    }
 }

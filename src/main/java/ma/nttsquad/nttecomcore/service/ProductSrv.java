@@ -3,7 +3,6 @@ package ma.nttsquad.nttecomcore.service;
 import ma.nttsquad.nttecomcore.dto.ProductDto;
 import ma.nttsquad.nttecomcore.dto.ProductFilterDto;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 public interface ProductSrv {
@@ -17,5 +16,7 @@ public interface ProductSrv {
     void saveProduct(ProductDto productDto);
 
     List<ProductDto> filter(ProductFilterDto productFilterDto);
+
+    Double maxPrice();
 
 }

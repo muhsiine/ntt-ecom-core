@@ -74,8 +74,18 @@ public class ProductCtrl {
             @ApiResponse(responseCode = "200", description = "successful operation", content = @Content(array = @ArraySchema(schema = @Schema(implementation = Product.class)))),
             @ApiResponse(responseCode = "400", description = "Bad request", content = @Content(schema = @Schema(description = "HTTP status error code", example = "400")))
     })
-    @GetMapping("/filter")
-    public ResponseEntity<Object> filter(@RequestBody ProductFilterDto productFilterDto){
+    @PostMapping("/filter")
+    public ResponseEntity<Object> filter(@RequestBody(required = false) ProductFilterDto productFilterDto){
         return ResponseEntity.ok(productSrv.filter(productFilterDto));
+    }
+
+    @Operation(summary = "maxPrice", description = "maxPrice", tags = "Product")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "successful operation", content = @Content(array = @ArraySchema(schema = @Schema(implementation = Product.class)))),
+            @ApiResponse(responseCode = "400", description = "Bad request", content = @Content(schema = @Schema(description = "HTTP status error code", example = "400")))
+    })
+    @GetMapping("/maxPrice")
+    public ResponseEntity<Object> maxPrice(){
+        return ResponseEntity.ok(productSrv.maxPrice());
     }
 }
