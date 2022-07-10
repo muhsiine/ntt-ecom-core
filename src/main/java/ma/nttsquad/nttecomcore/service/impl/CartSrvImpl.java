@@ -70,7 +70,23 @@ public class CartSrvImpl implements CartSrv {
     }
 
     @Override
+    public void updateCart(Long cart_id, CartDto cartDto) {
+        log.trace("start update cart: {} {}",cart_id, cartDto);
+        CartDto cart = getCartById(cart_id);
+        cartDto.setId(cart.getId());
+        cartRepository.save(CartMapper.INSTANCE.dtoToEntity(cartDto));
+        log.trace("end update cart: {} {}",cart_id, cart);
+    }
+
+    @Override
     public void removeItemsFromCart(Long cartId, List<Long> cartItemsId) {
         cartItemRepository.deleteAllById(cartItemsId);
+    }
+
+    @Override
+    public void deleteCart(Long cart_id) {
+        log.trace("start delete cart: {}",cart_id);
+        cartItemRepository.deleteById(cart_id);
+        log.trace("end delete cart: {}",cart_id);
     }
 }

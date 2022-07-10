@@ -13,6 +13,7 @@ public interface CategoryByLangMapper {
 
     @Mapping(target = "categoryCode", source = "category.categoryCode")
     @Mapping(target = "icon", source = "category.icon")
+    @Mapping(target = "id", source = "category.id")
     CategoryByLangDto entityToDto(CategoryByLang categoryByLang);
 
 

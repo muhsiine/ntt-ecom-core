@@ -15,4 +15,8 @@ public interface ProductSrv {
     List<ProductDto> getProductByCategoryId(Long categoryId);
 
     void saveProduct(ProductDto productDto);
+
+    void updateProduct(Long product_id,ProductDto productDto);
+
+    void deleteProduct(Long productId);
 }

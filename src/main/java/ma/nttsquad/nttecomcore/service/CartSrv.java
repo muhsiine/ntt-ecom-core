@@ -20,6 +20,10 @@ public interface CartSrv {
 
     void addItemsToCart(List<CartItemDto> cartItems, Long cart_id);
 
+    void updateCart(Long cart_id, CartDto cartDto);
+
     void removeItemsFromCart(Long cart_id, List<Long> cartItem_id);
+
+    void deleteCart(Long cart_id);
 
 }
