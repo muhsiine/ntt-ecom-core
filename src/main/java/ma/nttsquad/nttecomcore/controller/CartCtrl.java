@@ -11,7 +11,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import ma.nttsquad.nttecomcore.dto.CartDto;
 import ma.nttsquad.nttecomcore.dto.CartItemDto;
+import ma.nttsquad.nttecomcore.exception.NttNotFoundException;
 import ma.nttsquad.nttecomcore.service.CartSrv;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -32,8 +34,12 @@ public class CartCtrl {
     }
     )
     @GetMapping("/all")
-    public List<CartDto> getAll(){
-        return cartSrv.getAllCarts();
+    public ResponseEntity<List<CartDto>> getAll(){
+        List<CartDto> allCartDTO = cartSrv.getAllCarts();
+        if(allCartDTO == null || allCartDTO.isEmpty()){
+            throw new NttNotFoundException("The List Cart is Empty");
+        }
+        return ResponseEntity.ok().body(allCartDTO);
     }
 
     @Operation(summary = "Find user cart", description = "Find user cart", tags = "Cart")
@@ -43,8 +49,8 @@ public class CartCtrl {
     }
     )
     @GetMapping("/user/{user_id}")
-    public CartDto getCartByUser(@PathVariable(name = "user_id") Long user_id) {
-        return cartSrv.getCartByUser(user_id);
+    public ResponseEntity<CartDto> getCartByUser(@PathVariable(name = "user_id") Long user_id) {
+        return ResponseEntity.ok().body(cartSrv.getCartByUser(user_id));
     }
 
     @Operation(summary = "Find cart items of cart", description = "Find cart items of cart", tags = "Cart")
@@ -54,9 +60,13 @@ public class CartCtrl {
     }
     )
     @GetMapping("/{cartId}/cartItems")
-    public List<CartItemDto> getCartItemsByCartId(@PathVariable(name = "cartId") Long cartId){
+    public ResponseEntity<List<CartItemDto>> getCartItemsByCartId(@PathVariable(name = "cartId") Long cartId){
         log.trace("{}", cartId);
-        return cartSrv.getCartItemsByCartId(cartId);
+        List<CartItemDto> cartItemDtoList = cartSrv.getCartItemsByCartId(cartId);
+        if(cartItemDtoList == null || cartItemDtoList.isEmpty()){
+            throw new NttNotFoundException("The cart doesn't contain any cart items");
+        }
+        return ResponseEntity.ok().body(cartItemDtoList);
     }
 
     @Operation(summary = "add new Cart", description = "Add New Cart", tags = "Cart")
