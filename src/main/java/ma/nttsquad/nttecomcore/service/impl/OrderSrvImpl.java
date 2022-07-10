@@ -1,27 +1,26 @@
 package ma.nttsquad.nttecomcore.service.impl;
 
+import lombok.RequiredArgsConstructor;
 import ma.nttsquad.nttecomcore.dto.OrderDto;
 import ma.nttsquad.nttecomcore.mapper.OrderMapper;
 import ma.nttsquad.nttecomcore.model.repository.OrderRepository;
 import ma.nttsquad.nttecomcore.service.OrderSrv;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class OrderSrvImpl implements OrderSrv {
 
-    @Autowired
-    OrderRepository orderRepository;
+    final OrderRepository orderRepository;
 
     @Override
-    public List<OrderDto> getOrders() {
+    public List<OrderDto> getAllOrders() {
         return orderRepository.findAll()
                 .stream()
                 .map(OrderMapper.INSTANCE::entityToDto)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Override
@@ -29,6 +28,6 @@ public class OrderSrvImpl implements OrderSrv {
         return orderRepository.findByUserId(userId)
                 .stream()
                 .map(OrderMapper.INSTANCE::entityToDto)
-                .collect(Collectors.toList());
+                .toList();
     }
 }

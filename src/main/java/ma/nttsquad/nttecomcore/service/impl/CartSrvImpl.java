@@ -12,30 +12,29 @@ import ma.nttsquad.nttecomcore.service.CartSrv;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Slf4j
 @RequiredArgsConstructor
 @Service
 public class CartSrvImpl implements CartSrv {
 
-    private final CartRepository cartRepository;
-    private final CartItemRepository cartItemRepository;
+    final CartRepository cartRepository;
+    final CartItemRepository cartItemRepository;
 
     @Override
     public List<CartDto> getAllCarts() {
         return cartRepository.findAll()
                 .stream()
                 .map(CartMapper.INSTANCE::entityToDto)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Override
-    public CartDto getCartByUser(Long user_id) {
-        log.trace("{}", user_id);
-        return cartRepository.findCartByUserId(user_id)
+    public CartDto getCartByUserId(Long userId) {
+        log.trace("{}", userId);
+        return cartRepository.findCartByUserId(userId)
                 .map(CartMapper.INSTANCE::entityToDto)
-                .orElseThrow(() -> new NttNotFoundException("There's no cart belonging the user with the id '%d'".formatted(user_id)));
+                .orElseThrow(() -> new NttNotFoundException("There's no cart belonging the user with the id '%d'".formatted(userId)));
     }
 
     @Override
@@ -55,18 +54,17 @@ public class CartSrvImpl implements CartSrv {
     }
 
     @Override
-    public void saveCart(CartDto cartDto) {
+    public CartDto saveCart(CartDto cartDto) {
         log.trace("{}", cartDto);
-        cartRepository.save(CartMapper.INSTANCE.dtoToEntity(cartDto));
+        return CartMapper.INSTANCE.entityToDto(cartRepository.save(CartMapper.INSTANCE.dtoToEntity(cartDto)));
     }
 
     @Override
-    public void addItemsToCart(List<CartItemDto> cartItems, Long cart_id) {
-        log.trace("{}:{}", cartItems, cart_id);
-        CartDto cartDto = getCartById(cart_id);
-        cartDto.getCartItems()
-                .addAll(cartItems);
-        cartRepository.save(CartMapper.INSTANCE.dtoToEntity(cartDto));
+    public CartDto addItemsToCart(List<CartItemDto> cartItems, Long cartId) {
+        log.trace("{}:{}", cartItems, cartId);
+        CartDto cartDto = getCartById(cartId);
+        cartDto.getCartItems().addAll(cartItems);
+        return CartMapper.INSTANCE.entityToDto(cartRepository.save(CartMapper.INSTANCE.dtoToEntity(cartDto)));
     }
 
     @Override

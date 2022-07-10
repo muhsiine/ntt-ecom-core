@@ -48,9 +48,9 @@ public class CartCtrl {
             @ApiResponse(responseCode = "400", description = "Bad request", content = @Content(schema = @Schema(description = "HTTP status error code", example = "400")))
     }
     )
-    @GetMapping("/user/{user_id}")
-    public ResponseEntity<CartDto> getCartByUser(@PathVariable(name = "user_id") Long user_id) {
-        return ResponseEntity.ok().body(cartSrv.getCartByUser(user_id));
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<CartDto> getCartByUserId(@PathVariable(name = "userId") Long userId) {
+        return ResponseEntity.ok().body(cartSrv.getCartByUser(userId));
     }
 
     @Operation(summary = "Find cart items of cart", description = "Find cart items of cart", tags = "Cart")
@@ -76,9 +76,9 @@ public class CartCtrl {
     }
     )
     @PostMapping("/save")
-    public void saveCart(@RequestBody CartDto cartDto){
+    public CartDto saveCart(@RequestBody CartDto cartDto){
         log.trace("{}", cartDto);
-        cartSrv.saveCart(cartDto);
+        return cartSrv.saveCart(cartDto);
     }
 
     @Operation(summary = "add items to Cart", description = "Add items to Cart", tags = "Cart")
@@ -89,9 +89,9 @@ public class CartCtrl {
     )
 
     @PostMapping("/{cartId}/add/cartItems/")
-    public void addItemsToCart(@RequestBody List<CartItemDto> cartItems, @PathVariable(name = "cartId") Long cartId){
+    public CartDto addItemsToCart(@RequestBody List<CartItemDto> cartItems, @PathVariable(name = "cartId") Long cartId){
         log.trace("{},{}", cartItems, cartId);
-        cartSrv.addItemsToCart(cartItems, cartId);
+        return cartSrv.addItemsToCart(cartItems, cartId);
     }
 
     @Operation(summary = "remove items from Cart", description = "remove items from Cart", tags = "Cart")
