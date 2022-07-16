@@ -41,10 +41,10 @@ public class ProductCtrl {
             @ApiResponse(responseCode = "200", description = "successful operation", content = @Content(array = @ArraySchema(schema = @Schema(implementation = Product.class)))),
             @ApiResponse(responseCode = "400", description = "Bad request", content = @Content(schema = @Schema(description = "HTTP status error code", example = "400")))
     })
-    @GetMapping("/{id}")
-    public ProductDto getProductById(@PathVariable("id") Long productId){
-        log.info("Id: {}", productId);
-        return productSrv.getProductById(productId);
+    @GetMapping("/get/{product_id}")
+    public ProductDto getProductById(@PathVariable("product_id") Long product_id){
+        log.info("Id: {}", product_id);
+        return productSrv.getProductById(product_id);
     }
 
     @Operation(summary = "Find Product by Category Id", description = "Find Product by Category Id", tags = "Product")
@@ -65,6 +65,29 @@ public class ProductCtrl {
     @PostMapping("/save")
     public void saveProduct(@RequestBody ProductDto productDto){
         productSrv.saveProduct(productDto);
+    }
+
+    @Operation(summary = "update product", description = "Update Product", tags = "Product")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "successful operation", content = @Content(array = @ArraySchema(schema = @Schema(implementation = ProductDto.class)))),
+            @ApiResponse(responseCode = "400", description = "Bad request", content = @Content(schema = @Schema(description = "HTTP status error code", example = "400")))
+    }
+    )
+    @PostMapping("/edit/{product_id}")
+    public void updatProduct(@PathVariable(name = "product_id") Long product_id,@RequestBody ProductDto productDto){
+        log.trace("{}", productDto);
+        productSrv.updateProduct(product_id,productDto);
+    }
+
+    @Operation(summary = "delete product", description = "delete Product", tags = "Product")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "successful operation", content = @Content(array = @ArraySchema(schema = @Schema(implementation = Product.class)))),
+            @ApiResponse(responseCode = "400", description = "Bad request", content = @Content(schema = @Schema(description = "HTTP status error code", example = "400")))
+    }
+    )
+    @PostMapping("/delete/{product_id}")
+    public void deleteProduct(@PathVariable("product_id") Long product_id){
+        productSrv.deleteProduct(product_id);
     }
 
 }
