@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import ma.nttsquad.nttecomcore.dto.UserDto;
 import ma.nttsquad.nttecomcore.service.UserSrv;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,6 +23,7 @@ import java.util.List;
 @Tag(name = "User", description = "The User API")
 public class UserCtrl {
 
+    @Autowired
     final UserSrv userSrv;
 
     @Operation(summary = "Find all users", description = "Find All Users", tags = "User")

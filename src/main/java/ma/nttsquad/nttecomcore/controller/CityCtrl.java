@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import ma.nttsquad.nttecomcore.dto.CityDto;
 import ma.nttsquad.nttecomcore.service.CitySrv;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,7 +22,7 @@ import java.util.List;
 @RequestMapping("/cities")
 @Tag(name = "City", description = "The City API")
 public class CityCtrl {
-
+    @Autowired
     final CitySrv citySrv;
 
     @Operation(summary = "Find all cities", description = "Find All Cities", tags = "City")

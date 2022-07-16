@@ -13,6 +13,7 @@ import ma.nttsquad.nttecomcore.dto.AddressDto;
 import ma.nttsquad.nttecomcore.dto.CartDto;
 import ma.nttsquad.nttecomcore.dto.CartItemDto;
 import ma.nttsquad.nttecomcore.service.CartSrv;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,6 +25,7 @@ import java.util.List;
 @Tag(name = "Cart", description = "The Cart API")
 public class CartCtrl {
 
+    @Autowired
     final CartSrv cartSrv;
 
     @Operation(summary = "Find all carts", description = "Find all carts", tags = "Cart")

@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import ma.nttsquad.nttecomcore.dto.CategoryByLangDto;
 import ma.nttsquad.nttecomcore.service.CategoryByLangSrv;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,6 +23,7 @@ import java.util.List;
 @Tag(name = "CategoryByLang", description = "The Categories By Lang API")
 public class CategoryByLangCtrl {
 
+    @Autowired
     final CategoryByLangSrv categoryByLangSrv;
 
     @Operation(summary = "Find all categories by lang", description = "Find all Categories By Lang", tags = "CategoryByLang")

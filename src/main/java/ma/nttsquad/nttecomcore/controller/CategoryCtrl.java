@@ -15,6 +15,7 @@ import ma.nttsquad.nttecomcore.dto.CategoryByLangDto;
 import ma.nttsquad.nttecomcore.dto.CategoryDto;
 import ma.nttsquad.nttecomcore.model.Category;
 import ma.nttsquad.nttecomcore.service.CategoriesSrv;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
@@ -25,7 +26,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CategoryCtrl {
 
-
+    @Autowired
     private final CategoriesSrv categorySrv;
 
     @Operation(summary = "Find all Categories", description = "Find all Categories", tags = "Categories")

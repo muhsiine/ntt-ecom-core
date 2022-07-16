@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import ma.nttsquad.nttecomcore.dto.CartItemDto;
 import ma.nttsquad.nttecomcore.service.CartItemSrv;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,6 +23,7 @@ import java.util.List;
 @Tag(name = "CartItem", description = "The CartItem API")
 public class CartItemCtrl {
 
+    @Autowired
     final CartItemSrv cartItemSrv;
 
     @Operation(summary = "Find all cart items", description = "Find All Cart Items", tags = "CartItem")

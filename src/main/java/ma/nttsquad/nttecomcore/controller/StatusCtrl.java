@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import ma.nttsquad.nttecomcore.dto.StatusDto;
 import ma.nttsquad.nttecomcore.service.StatusSrv;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,6 +23,7 @@ import java.util.List;
 @Tag(name = "Status", description = "The Status API")
 public class StatusCtrl {
 
+    @Autowired
     final StatusSrv statusSrv;
 
     @Operation(summary = "Find all status", description = "Find All Status", tags = "Status")

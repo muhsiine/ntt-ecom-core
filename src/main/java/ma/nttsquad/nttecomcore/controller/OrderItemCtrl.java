@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import ma.nttsquad.nttecomcore.dto.OrderItemDto;
 import ma.nttsquad.nttecomcore.service.OrderItemSrv;
 import ma.nttsquad.nttecomcore.service.OrderItemSrv;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,6 +24,7 @@ import java.util.List;
 @Tag(name = "OrderItem", description = "The Order Item API")
 public class OrderItemCtrl {
 
+    @Autowired
     final OrderItemSrv orderItemSrv;
 
     @Operation(summary = "Find all order items", description = "Find All Order Items", tags = "OrderItem")

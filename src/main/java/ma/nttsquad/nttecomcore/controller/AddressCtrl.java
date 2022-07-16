@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import ma.nttsquad.nttecomcore.dto.AddressDto;
 import ma.nttsquad.nttecomcore.service.AddressSrv;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,6 +23,7 @@ import java.util.List;
 @Tag(name = "Address", description = "The Address API")
 public class AddressCtrl {
 
+    @Autowired
     final AddressSrv addressSrv;
 
     @Operation(summary = "Find all addresses", description = "Find all addresses", tags = "Address")
