@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import ma.nttsquad.nttecomcore.dto.ProductDto;
 import ma.nttsquad.nttecomcore.model.Product;
@@ -17,13 +18,13 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/products")
 @Slf4j
 @Tag(name = "Product", description = "The Products API")
 public class ProductCtrl {
 
-    @Autowired
-    private ProductSrv productSrv;
+    final ProductSrv productSrv;
 
     @Operation(summary = "Find all Products", description = "Find all Products", tags = "Product")
     @ApiResponses(value = {
@@ -63,8 +64,8 @@ public class ProductCtrl {
             @ApiResponse(responseCode = "400", description = "Bad request", content = @Content(schema = @Schema(description = "HTTP status error code", example = "400")))
     })
     @PostMapping("/save")
-    public void saveProduct(@RequestBody ProductDto productDto){
-        productSrv.saveProduct(productDto);
+    public ProductDto saveProduct(@RequestBody ProductDto productDto){
+        return productSrv.saveProduct(productDto);
     }
 
 }
