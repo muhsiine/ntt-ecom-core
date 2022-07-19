@@ -13,10 +13,9 @@ public interface ProductSrv {
 
     List<ProductDto> getProductByCategoryId(Long categoryId);
 
-    void saveProduct(ProductDto productDto);
+    ProductDto saveProduct(ProductDto productDto);
 
     List<ProductDto> filter(ProductFilterDto productFilterDto);
 
     Double maxPrice();
-
 }
