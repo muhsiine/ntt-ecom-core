@@ -18,7 +18,8 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     @Query(value = "FROM Product p WHERE" +
             "(:#{#productFilterDto.name} IS NULL OR UPPER(p.name) LIKE UPPER(CONCAT('%',:#{#productFilterDto.name},'%'))) " +
             "AND (:#{#productFilterDto.description} IS NULL OR UPPER(p.description) LIKE (UPPER(CONCAT('%',:#{#productFilterDto.description},'%')) ))  " +
-            "AND (:#{#productFilterDto.initialDate} IS NULL OR :#{#productFilterDto.endDate} IS NULL OR p.createdAt BETWEEN :#{#productFilterDto.initialDate} AND :#{#productFilterDto.endDate}) " +
+            "AND (:#{#productFilterDto.initialDate} IS NULL OR p.createdAt >= :#{#productFilterDto.initialDate}) " +
+            "AND (:#{#productFilterDto.endDate} IS NULL OR p.createdAt <= :#{#productFilterDto.endDate}) " +
             "AND (:#{#productFilterDto.categoryId} IS NULL OR p.category.id = :#{#productFilterDto.categoryId}) " +
             "AND (:#{#productFilterDto.price1} IS NULL OR p.price >= :#{#productFilterDto.price1})" +
             "AND (:#{#productFilterDto.price2} IS NULL OR p.price <= :#{#productFilterDto.price2}) ")
