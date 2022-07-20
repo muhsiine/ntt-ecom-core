@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface OrderSrv {
 
-    List<OrderDto> getOrders();
+    List<OrderDto> getAllOrders();
 
     List<OrderDto> getOrdersByUserId(Long userId);
 }

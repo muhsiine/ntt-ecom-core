@@ -7,10 +7,10 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
 import ma.nttsquad.nttecomcore.dto.OrderDto;
 import ma.nttsquad.nttecomcore.model.Order;
 import ma.nttsquad.nttecomcore.service.OrderSrv;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,12 +19,12 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/orders")
 @Tag(name = "Order", description = "The Order API")
 public class OrderCtrl {
 
-    @Autowired
-    OrderSrv orderSrv;
+    final OrderSrv orderSrv;
 
     @Operation(summary = "Find all Orders", description = "Find all Orders", tags = "Order")
     @ApiResponses(value = {
@@ -33,8 +33,8 @@ public class OrderCtrl {
     }
     )
     @GetMapping("/all")
-    public List<OrderDto> getOrders() {
-        return orderSrv.getOrders();
+    public List<OrderDto> getAllOrders() {
+        return orderSrv.getAllOrders();
     }
 
     @Operation(summary = "Find all Orders by User Id", description = "Find all Orders by User Id", tags = "Order")

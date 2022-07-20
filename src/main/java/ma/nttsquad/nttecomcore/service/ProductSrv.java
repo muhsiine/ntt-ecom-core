@@ -1,8 +1,7 @@
 package ma.nttsquad.nttecomcore.service;
 
 import ma.nttsquad.nttecomcore.dto.ProductDto;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
+import ma.nttsquad.nttecomcore.dto.ProductFilterDto;
 
 import java.util.List;
 
@@ -14,5 +13,9 @@ public interface ProductSrv {
 
     List<ProductDto> getProductByCategoryId(Long categoryId);
 
-    void saveProduct(ProductDto productDto);
+    ProductDto saveProduct(ProductDto productDto);
+
+    List<ProductDto> filter(ProductFilterDto productFilterDto);
+
+    Double maxPrice();
 }
