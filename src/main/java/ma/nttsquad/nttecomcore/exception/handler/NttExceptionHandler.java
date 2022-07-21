@@ -1,6 +1,7 @@
 package ma.nttsquad.nttecomcore.exception.handler;
 
 
+import ma.nttsquad.nttecomcore.exception.NttBadRequestException;
 import ma.nttsquad.nttecomcore.exception.NttNotFoundException;
 import ma.nttsquad.nttecomcore.exception.records.ErrorResponse;
 import org.springframework.http.HttpStatus;
@@ -22,4 +23,14 @@ public class NttExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(notFoundException, noContent);
 
     }
+
+    @ExceptionHandler(value = {NttBadRequestException.class})
+    public ResponseEntity<ErrorResponse> NttBadRequestException(NttBadRequestException e) {
+        HttpStatus noContent = HttpStatus.BAD_REQUEST;
+        ErrorResponse badRequestException = new ErrorResponse(e.getMessage(), noContent, LocalDateTime.now());
+
+        return new ResponseEntity<>(badRequestException, noContent);
+
+    }
+
 }

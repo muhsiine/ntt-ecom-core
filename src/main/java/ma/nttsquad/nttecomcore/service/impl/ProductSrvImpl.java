@@ -18,18 +18,34 @@ public class ProductSrvImpl implements ProductSrv {
 
     @Override
     public List<ProductDto> getAllProducts() {
-        return productRepository.findAll().stream().map(ProductMapper.INSTANCE::entityToDto).toList();
+        List<ProductDto> allProducts = productRepository
+                                            .findAll()
+                                            .stream()
+                                            .map(ProductMapper.INSTANCE::entityToDto)
+                                            .toList();
+        if(allProducts == null || allProducts.isEmpty()){
+            throw new NttNotFoundException("There's no Products in data base");
+        }
+        return allProducts;
     }
 
     @Override
     public ProductDto getProductById(Long productId) {
         return ProductMapper.INSTANCE.entityToDto(productRepository.findById(productId)
-                .orElseThrow(() -> new NttNotFoundException("product with id '%d' not found".formatted(productId))));
+                .orElseThrow(() -> new NttNotFoundException("product with id '%d' is not found".formatted(productId))));
     }
 
     @Override
     public List<ProductDto> getProductByCategoryId(Long categoryId) {
-        return productRepository.findByCategoryId(categoryId).stream().map(ProductMapper.INSTANCE::entityToDto).toList();
+        List<ProductDto> allProducts = productRepository
+                .findByCategoryId(categoryId)
+                .stream()
+                .map(ProductMapper.INSTANCE::entityToDto)
+                .toList();
+        if(allProducts == null || allProducts.isEmpty()){
+            throw new NttNotFoundException("There's no Products belonging the Category with the id '%d'".formatted(categoryId));
+        }
+        return allProducts;
     }
 
     @Override
