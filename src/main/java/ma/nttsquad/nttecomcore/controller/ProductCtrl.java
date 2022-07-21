@@ -13,11 +13,13 @@ import ma.nttsquad.nttecomcore.dto.CartDto;
 import ma.nttsquad.nttecomcore.dto.ProductDto;
 import ma.nttsquad.nttecomcore.exception.NttBadRequestException;
 import ma.nttsquad.nttecomcore.exception.records.ErrorResponse;
+import ma.nttsquad.nttecomcore.dto.ProductFilterDto;
 import ma.nttsquad.nttecomcore.model.Product;
 import ma.nttsquad.nttecomcore.service.ProductSrv;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
@@ -86,4 +88,27 @@ public class ProductCtrl {
         }
     }
 
+    @Operation(summary = "filer Product", description = "filer Product", tags = "Product", responses = {
+            @ApiResponse(responseCode = "200", description = "OK", content = @Content(array = @ArraySchema(schema = @Schema(implementation = ProductDto.class)))),
+            @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "404", description = "Not Found", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "500", description = "Bad GATEWAY", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+    })
+    @PostMapping("/filter")
+    public ResponseEntity<List<ProductDto>> filter(@RequestBody(required = false) ProductFilterDto productFilterDto){
+        return ResponseEntity.ok(productSrv.filter(productFilterDto));
+    }
+
+    @Operation(summary = "get max Price", description = "get max Price", tags = "Product", responses = {
+            @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = Double.class))),
+            @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "404", description = "Not Found", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "500", description = "Bad GATEWAY", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+    })
+    @GetMapping("/maxPrice")
+    public ResponseEntity<Double> maxPrice(){
+        return ResponseEntity.ok(productSrv.maxPrice());
+    }
 }

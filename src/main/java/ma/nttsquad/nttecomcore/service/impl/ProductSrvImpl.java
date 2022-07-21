@@ -3,6 +3,7 @@ package ma.nttsquad.nttecomcore.service.impl;
 import lombok.RequiredArgsConstructor;
 import ma.nttsquad.nttecomcore.dto.ProductDto;
 import ma.nttsquad.nttecomcore.exception.NttNotFoundException;
+import ma.nttsquad.nttecomcore.dto.ProductFilterDto;
 import ma.nttsquad.nttecomcore.mapper.ProductMapper;
 import ma.nttsquad.nttecomcore.model.repository.ProductRepository;
 import ma.nttsquad.nttecomcore.service.ProductSrv;
@@ -51,5 +52,23 @@ public class ProductSrvImpl implements ProductSrv {
     @Override
     public ProductDto saveProduct(ProductDto productDto) {
         return ProductMapper.INSTANCE.entityToDto(productRepository.save(ProductMapper.INSTANCE.dtoToEntity(productDto)));
+    }
+
+    @Override
+    public List<ProductDto> filter(ProductFilterDto productFilterDto) {
+        List<ProductDto> filtredProducts = productRepository
+                .filter(productFilterDto)
+                .stream()
+                .map(ProductMapper.INSTANCE::entityToDto)
+                .toList();
+        if(filtredProducts == null || filtredProducts.isEmpty()){
+            throw new NttNotFoundException("There's no Products for your filtre");
+        }
+        return filtredProducts;
+    }
+
+    @Override
+    public Double maxPrice() {
+        return productRepository.maxPrice();
     }
 }
