@@ -1,9 +1,11 @@
 package ma.nttsquad.nttecomcore.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import ma.nttsquad.nttecomcore.dto.ProductImageDto;
 import ma.nttsquad.nttecomcore.dto.StatusDto;
+import ma.nttsquad.nttecomcore.exception.NttNotFoundException;
 import ma.nttsquad.nttecomcore.exception.NttNotFoundException;
 import ma.nttsquad.nttecomcore.mapper.ProductImageMapper;
 import ma.nttsquad.nttecomcore.mapper.StatusMapper;
@@ -27,10 +29,14 @@ public class ProductImageSrvImpl implements ProductImageSrv {
 
     @Override
     public List<ProductImageDto> getImageByProduct(Long productId) {
-        return productImageRepository.findByProductId(productId)
+        List<ProductImageDto> allImages= productImageRepository.findByProductId(productId)
                 .stream()
                 .map(ProductImageMapper.INSTANCE::entityToDto)
-                .collect(Collectors.toList());
+                .toList();
+        if(allImages == null || allImages.isEmpty()){
+            throw new NttNotFoundException("There's no Images belonging the Product with the id '%d'".formatted(productId));
+        }
+        return allImages;
     }
 
     @Override

@@ -2,7 +2,11 @@ package ma.nttsquad.nttecomcore.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import lombok.RequiredArgsConstructor;
 import ma.nttsquad.nttecomcore.dto.ProductDto;
+import ma.nttsquad.nttecomcore.exception.NttNotFoundException;
+import ma.nttsquad.nttecomcore.exception.NttNotFoundException;
+import ma.nttsquad.nttecomcore.dto.ProductFilterDto;
 import ma.nttsquad.nttecomcore.exception.NttNotFoundException;
 import ma.nttsquad.nttecomcore.mapper.ProductMapper;
 import ma.nttsquad.nttecomcore.model.repository.ProductRepository;
@@ -23,10 +27,15 @@ public class ProductSrvImpl implements ProductSrv {
 
     @Override
     public List<ProductDto> getAllProducts() {
-        return productRepository.findAll()
-                .stream()
-                .map(ProductMapper.INSTANCE::entityToDto)
-                .collect(Collectors.toList());
+        List<ProductDto> allProducts = productRepository
+                                            .findAll()
+                                            .stream()
+                                            .map(ProductMapper.INSTANCE::entityToDto)
+                                            .toList();
+        if(allProducts == null || allProducts.isEmpty()){
+            throw new NttNotFoundException("There's no Products in data base");
+        }
+        return allProducts;
     }
 
     @Override
@@ -39,10 +48,17 @@ public class ProductSrvImpl implements ProductSrv {
 
     @Override
     public List<ProductDto> getProductByCategoryId(Long categoryId) {
-        return productRepository.findByCategoryId(categoryId).stream()
+        List<ProductDto> allProducts = productRepository
+                .findByCategoryId(categoryId)
+                .stream()
                 .map(ProductMapper.INSTANCE::entityToDto)
-                .collect(Collectors.toList());
+                .toList();
+        if(allProducts == null || allProducts.isEmpty()){
+            throw new NttNotFoundException("There's no Products belonging the Category with the id '%d'".formatted(categoryId));
+        }
+        return allProducts;
     }
+
 
     @Override
     public void saveProduct(ProductDto productDto) {
@@ -65,5 +81,22 @@ public class ProductSrvImpl implements ProductSrv {
         log.trace("start delete product: {}",product_id);
         productRepository.deleteById(product_id);
         log.trace("end delete product: {}",product_id);
+    }
+    @Override
+    public List<ProductDto> filter(ProductFilterDto productFilterDto) {
+        List<ProductDto> filtredProducts = productRepository
+                .filter(productFilterDto)
+                .stream()
+                .map(ProductMapper.INSTANCE::entityToDto)
+                .toList();
+        if(filtredProducts == null || filtredProducts.isEmpty()){
+            throw new NttNotFoundException("There's no Products for your filtre");
+        }
+        return filtredProducts;
+    }
+
+    @Override
+    public Double maxPrice() {
+        return productRepository.maxPrice();
     }
 }

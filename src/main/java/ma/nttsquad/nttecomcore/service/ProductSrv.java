@@ -14,9 +14,13 @@ public interface ProductSrv {
 
     List<ProductDto> getProductByCategoryId(Long categoryId);
 
-    void saveProduct(ProductDto productDto);
-
     void updateProduct(Long product_id,ProductDto productDto);
 
     void deleteProduct(Long productId);
+
+    ProductDto saveProduct(ProductDto productDto);
+
+    List<ProductDto> filter(ProductFilterDto productFilterDto);
+
+    Double maxPrice();
 }

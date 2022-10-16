@@ -21,15 +21,19 @@ public interface CartMapper {
 
     @AfterMapping
     default void addBackReference(@MappingTarget CartDto cartDto){
-        for(CartItemDto cartItemDto: cartDto.getCartItems()){
-            cartItemDto.setCart(cartDto);
+        if( cartDto.getCartItems() !=null && !cartDto.getCartItems().isEmpty()) {
+            for (CartItemDto cartItemDto : cartDto.getCartItems()) {
+                cartItemDto.setCart(cartDto);
+            }
         }
     }
 
     @AfterMapping
     default void addBackReference(@MappingTarget Cart cart){
-        for(CartItem cartItem: cart.getCartItems()){
-            cartItem.setCart(cart);
+        if(cart.getCartItems() !=null &&  !cart.getCartItems().isEmpty()) {
+            for (CartItem cartItem : cart.getCartItems()) {
+                cartItem.setCart(cart);
+            }
         }
     }
 }

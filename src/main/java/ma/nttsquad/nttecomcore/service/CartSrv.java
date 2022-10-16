@@ -10,19 +10,20 @@ public interface CartSrv {
 
     List<CartDto> getAllCarts();
 
-    CartDto getCartByUser(Long user_id);
+    CartDto getCartByUserId(Long userId);
 
     CartDto getCartById(Long id);
 
-    List<CartItemDto> getCartItemsByCartId(Long cart_id);
+    List<CartItemDto> getCartItemsByCartId(Long cartId);
 
-    void saveCart(CartDto cartDto);
+    CartDto saveCart(CartDto cartDto);
 
-    void addItemsToCart(List<CartItemDto> cartItems, Long cart_id);
+    CartDto addItemsToCart(List<CartItemDto> cartItems, Long cartId);
 
     void updateCart(Long cart_id, CartDto cartDto);
 
-    void removeItemsFromCart(Long cart_id, List<Long> cartItem_id);
+    //void removeItemsFromCart(Long cart_id, List<Long> cartItem_id);
+    CartDto removeItemsFromCart(Long cartId, List<Long> cartItemId);
 
     void deleteCart(Long cart_id);
 

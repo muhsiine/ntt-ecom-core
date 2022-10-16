@@ -11,10 +11,18 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import ma.nttsquad.nttecomcore.cons.LangCons;
+import ma.nttsquad.nttecomcore.dto.CartDto;
 import ma.nttsquad.nttecomcore.dto.CategoryByLangDto;
 import ma.nttsquad.nttecomcore.dto.CategoryDto;
+import ma.nttsquad.nttecomcore.exception.records.ErrorResponse;
 import ma.nttsquad.nttecomcore.model.Category;
 import ma.nttsquad.nttecomcore.service.CategoriesSrv;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
@@ -29,14 +37,16 @@ public class CategoryCtrl {
     @Autowired
     private final CategoriesSrv categorySrv;
 
-    @Operation(summary = "Find all Categories", description = "Find all Categories", tags = "Categories")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "successful operation", content = @Content(array = @ArraySchema(schema = @Schema(implementation = Category.class)))),
-            @ApiResponse(responseCode = "400", description = "Bad request", content = @Content(schema = @Schema(description = "HTTP status error code", example = "400")))
+    @Operation(summary = "Find all Categories", description = "Find all Categories", tags = "Categories", responses = {
+            @ApiResponse(responseCode = "200", description = "OK", content = @Content(array = @ArraySchema(schema = @Schema(implementation = Category.class)))),
+            @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "404", description = "Not Found", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "500", description = "Bad GATEWAY", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     @GetMapping("/all")
-    public List<CategoryByLangDto> getAllCategoriesByLang(@RequestParam("lang") LangCons langCode) {
-        return categorySrv.getAllCategoriesByLang(langCode);
+    public ResponseEntity<List<CategoryByLangDto>> getAllCategoriesByLang(@RequestParam("lang") LangCons langCode) {
+        return ResponseEntity.ok().body(categorySrv.getAllCategoriesByLang(langCode));
     }
 
     @Operation(summary = "Find category by id", description = "Find Category By Id", tags = "Categories")

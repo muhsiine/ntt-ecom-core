@@ -8,6 +8,7 @@ import ma.nttsquad.nttecomcore.exception.NttNotFoundException;
 import ma.nttsquad.nttecomcore.mapper.CartMapper;
 import ma.nttsquad.nttecomcore.model.repository.CartItemRepository;
 import ma.nttsquad.nttecomcore.model.repository.CartRepository;
+import ma.nttsquad.nttecomcore.model.repository.ProductRepository;
 import ma.nttsquad.nttecomcore.service.CartSrv;
 import org.springframework.stereotype.Service;
 
@@ -19,23 +20,29 @@ import java.util.stream.Collectors;
 @Service
 public class CartSrvImpl implements CartSrv {
 
-    private final CartRepository cartRepository;
-    private final CartItemRepository cartItemRepository;
+    final CartRepository cartRepository;
+    final CartItemRepository cartItemRepository;
+
+    final ProductRepository productRepository;
 
     @Override
     public List<CartDto> getAllCarts() {
-        return cartRepository.findAll()
+        List<CartDto> allCartDTO = cartRepository.findAll()
                 .stream()
                 .map(CartMapper.INSTANCE::entityToDto)
-                .collect(Collectors.toList());
+                .toList();
+        if(allCartDTO == null || allCartDTO.isEmpty()){
+            throw new NttNotFoundException("There's no cart in data base");
+        }
+        return allCartDTO;
     }
 
     @Override
-    public CartDto getCartByUser(Long user_id) {
-        log.trace("{}", user_id);
-        return cartRepository.findCartByUserId(user_id)
+    public CartDto getCartByUserId(Long userId) {
+        log.trace("{}", userId);
+        return cartRepository.findCartByUserId(userId)
                 .map(CartMapper.INSTANCE::entityToDto)
-                .orElseThrow(() -> new NttNotFoundException("There's no cart belonging the user with the id '%d'".formatted(user_id)));
+                .orElseThrow(() -> new NttNotFoundException("There's no cart belonging the user with the id '%d'".formatted(userId)));
     }
 
     @Override
@@ -51,22 +58,29 @@ public class CartSrvImpl implements CartSrv {
     public List<CartItemDto> getCartItemsByCartId(Long cartId) {
         log.trace("{}", cartId);
         CartDto cartDto = getCartById(cartId);
+        if(cartDto.getCartItems() == null || cartDto.getCartItems().isEmpty()){
+            throw new NttNotFoundException("The cart doesn't contain any cart items");
+        }
         return cartDto.getCartItems();
     }
 
     @Override
-    public void saveCart(CartDto cartDto) {
+    public CartDto saveCart(CartDto cartDto) {
         log.trace("{}", cartDto);
-        cartRepository.save(CartMapper.INSTANCE.dtoToEntity(cartDto));
+        return CartMapper.INSTANCE.entityToDto(cartRepository.save(CartMapper.INSTANCE.dtoToEntity(cartDto)));
     }
 
     @Override
-    public void addItemsToCart(List<CartItemDto> cartItems, Long cart_id) {
-        log.trace("{}:{}", cartItems, cart_id);
-        CartDto cartDto = getCartById(cart_id);
-        cartDto.getCartItems()
-                .addAll(cartItems);
-        cartRepository.save(CartMapper.INSTANCE.dtoToEntity(cartDto));
+    public CartDto addItemsToCart(List<CartItemDto> cartItems, Long cartId) {
+        log.trace("{}:{}", cartItems, cartId);
+        CartDto cartDto = getCartById(cartId);
+        for (CartItemDto cartItem : cartItems) {
+            if(!productRepository.findById(cartItem.getProduct().getId()).isPresent()){
+                throw new NttNotFoundException("There's no Product with the id '%d'".formatted(cartItem.getProduct().getId()));
+            }
+        }
+        cartDto.getCartItems().addAll(cartItems);
+        return CartMapper.INSTANCE.entityToDto(cartRepository.save(CartMapper.INSTANCE.dtoToEntity(cartDto)));
     }
 
     @Override
@@ -79,8 +93,40 @@ public class CartSrvImpl implements CartSrv {
     }
 
     @Override
-    public void removeItemsFromCart(Long cartId, List<Long> cartItemsId) {
-        cartItemRepository.deleteAllById(cartItemsId);
+    public CartDto removeItemsFromCart(Long cartId, List<Long> cartItemsId) {
+        boolean hasCartItems = false;
+        CartDto cartDto = getCartById(cartId);
+        CartDto newCartDto = null;
+        if(!cartDto.getCartItems().isEmpty()) {
+            for (Long cartItemId : cartItemsId) {
+                CartItemDto cartItemDto = cartDto.getCartItems().stream()
+                        .filter(cartItem -> cartItem.getId().equals(getCartItemById(cartItemId).getId()))
+                        .findAny()
+                        .orElse(null);
+                if (cartItemDto != null) {
+                    cartDto.getCartItems().remove(cartItemDto);
+                    cartItemRepository.delete(CartItemMapper.INSTANCE.dtoToEntity(cartItemDto));
+                    hasCartItems = true;
+                }
+            }
+        }
+        else{
+            throw new NttNotFoundException("The cart doesn't contain any cart items");
+        }
+        if(hasCartItems)
+            newCartDto=cartDto;
+        else
+            throw new NttNotFoundException("The cart doesn't contain any selected cart items");
+        return newCartDto;
+    }
+
+
+    private CartItemDto getCartItemById(Long id) {
+        log.trace("{}", id);
+
+        return cartItemRepository.findById(id)
+                .map(CartItemMapper.INSTANCE::entityToDto)
+                .orElseThrow(() -> new NttNotFoundException("There's no cart Item with the id '%d'".formatted(id)));
     }
 
     @Override
