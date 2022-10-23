@@ -48,7 +48,7 @@ class ProductSrvTest {
         productSrv = new ProductSrvImpl(productRepository);
 
         category = new Category(3L,"Children", "icon");
-        productMock = new Product(1L, null, "desc", 15.22, null, category, 1, LocalDateTime.now(), null, null);
+        productMock = new Product(1L, null, "desc", 15.22, null, category, 1, LocalDateTime.now(), null, null,null);
         productDtoMock = ProductMapper.INSTANCE.entityToDto(productMock);
 
         mockProducList = new ArrayList<>();

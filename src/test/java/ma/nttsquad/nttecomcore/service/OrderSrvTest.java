@@ -46,14 +46,14 @@ class OrderSrvTest {
         orderItemList= new ArrayList<>();
 
         mockStatus = new Status(1L,"PENDING");
-        user = new User(1L,"yassir_123","Yassir","El Reklaoui","yassir9reklaoui@gmail.com","+212707244096","24/04/1996",null,null);
+        user = new User(1L,"yassir_123","Yassir","El Reklaoui","yassir9reklaoui@gmail.com","yasser123","+212707244096","24/04/1996",null,null,null);
         category = new Category(3L,"Children", "icon");
-        productMock = new Product(1L, null, "desc", 15.22, null, category, 1, LocalDateTime.now(), null, null);
+        productMock = new Product(1L, null, "desc", 15.22, null, category, 1, LocalDateTime.now(), null, null,null);
 
         orderItem = new OrderItem(1L,null,productMock,32);
         orderItemList.add(orderItem);
 
-        mockOrder =  new Order(1L,null,mockStatus,orderItemList, LocalDateTime.now(),LocalDateTime.now(),user);
+        mockOrder =  new Order(1L,null,mockStatus,orderItemList, LocalDateTime.now(),LocalDateTime.now(),109.99,user,null);
         mockOrderDto = OrderMapper.INSTANCE.entityToDto(mockOrder);
 
 

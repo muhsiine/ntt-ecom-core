@@ -58,13 +58,13 @@ class CartSrvTest {
         mockCartItemList=new ArrayList<>();
 
         category = new Category(3L,"Children", "icon");
-        productMock = new Product(1L, null, "desc", 15.22, null, category, 1, LocalDateTime.now(), null, null);
+        productMock = new Product(1L, null, "desc", 15.22, null, category, 1, LocalDateTime.now(), null, null,null);
         productDtoMock = ProductMapper.INSTANCE.entityToDto(productMock);
 
         mockCartItem = new CartItem(1L,null,productMock,5);
         mockCartItemList.add(mockCartItem);
 
-        user = new User(1L,"yassir_123","Yassir","El Reklaoui","yassir9reklaoui@gmail.com","+212707244096","24/04/1996",null,null);
+        user = new User(1L,"yassir_123","Yassir","El Reklaoui","yassir9reklaoui@gmail.com","yaser123","+212707244096","24/04/1996",null,null,null);
 
         mockCart = new Cart(1L,mockCartItemList,user);
         mockCartDto = CartMapper.INSTANCE.entityToDto(mockCart);
