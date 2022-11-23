@@ -10,9 +10,9 @@ public interface UserSrv {
 
     UserDto getUserById(Long user_id);
 
-    void saveUser(UserDto userDto);
+    UserDto saveUser(UserDto userDto);
 
-    void updateUser(Long user_id, UserDto userDto);
+    UserDto updateUser(Long user_id, UserDto userDto);
 
     void deleteUser(Long user_id);
 }

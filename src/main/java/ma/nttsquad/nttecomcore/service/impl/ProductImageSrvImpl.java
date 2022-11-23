@@ -1,11 +1,10 @@
 package ma.nttsquad.nttecomcore.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import ma.nttsquad.nttecomcore.dto.ProductImageDto;
 import ma.nttsquad.nttecomcore.dto.StatusDto;
-import ma.nttsquad.nttecomcore.exception.NttNotFoundException;
+import ma.nttsquad.nttecomcore.dto.UserDto;
 import ma.nttsquad.nttecomcore.exception.NttNotFoundException;
 import ma.nttsquad.nttecomcore.mapper.ProductImageMapper;
 import ma.nttsquad.nttecomcore.mapper.StatusMapper;
@@ -41,10 +40,15 @@ public class ProductImageSrvImpl implements ProductImageSrv {
 
     @Override
     public List<ProductImageDto> getAllProductsImages() {
-        return productImageRepository.findAll()
+        List<ProductImageDto> allProductImageDTO = productImageRepository.findAll()
                 .stream()
                 .map(ProductImageMapper.INSTANCE::entityToDto)
-                .collect(Collectors.toList());
+                .toList();
+        if(allProductImageDTO == null || allProductImageDTO.isEmpty()){
+            throw new NttNotFoundException("There's no products images in database");
+        }
+        return allProductImageDTO;
+
     }
 
     @Override
@@ -56,25 +60,22 @@ public class ProductImageSrvImpl implements ProductImageSrv {
     }
 
     @Override
-    public void saveProductImage(ProductImageDto productImageDto) {
-        log.trace("start save product image: {}",productImageDto);
-        productImageRepository.save(ProductImageMapper.INSTANCE.dtoToEntity(productImageDto));
-        log.trace("end save product image");
+    public ProductImageDto saveProductImage(ProductImageDto productImageDto) {
+        log.trace("save product image: {}",productImageDto);
+        return ProductImageMapper.INSTANCE.entityToDto(productImageRepository.save(ProductImageMapper.INSTANCE.dtoToEntity(productImageDto)));
     }
 
     @Override
-    public void updateProductImage(Long productImg_id, ProductImageDto productImageDto) {
-        log.trace("start update product image: {} {}",productImg_id, productImageDto);
+    public ProductImageDto updateProductImage(Long productImg_id, ProductImageDto productImageDto) {
+        log.trace("update product image: {} , {}",productImg_id, productImageDto);
         ProductImageDto prodImg = getProductImageById(productImg_id);
         productImageDto.setId(prodImg.getId());
-        productImageRepository.save(ProductImageMapper.INSTANCE.dtoToEntity(productImageDto));
-        log.trace("end update product image: {}",productImg_id);
+        return ProductImageMapper.INSTANCE.entityToDto(productImageRepository.save(ProductImageMapper.INSTANCE.dtoToEntity(productImageDto)));
     }
 
     @Override
     public void deleteProductImage(Long productImg_id) {
-        log.trace("start delete product image: {}",productImg_id);
+        log.trace("delete product image: {}",productImg_id);
         productImageRepository.deleteById(productImg_id);
-        log.trace("end delete product image: {}",productImg_id);
     }
 }

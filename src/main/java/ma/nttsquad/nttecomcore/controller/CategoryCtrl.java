@@ -6,25 +6,20 @@ import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import ma.nttsquad.nttecomcore.cons.LangCons;
-import ma.nttsquad.nttecomcore.dto.CartDto;
 import ma.nttsquad.nttecomcore.dto.CategoryByLangDto;
 import ma.nttsquad.nttecomcore.dto.CategoryDto;
+import ma.nttsquad.nttecomcore.exception.NttBadRequestException;
 import ma.nttsquad.nttecomcore.exception.records.ErrorResponse;
 import ma.nttsquad.nttecomcore.model.Category;
 import ma.nttsquad.nttecomcore.service.CategoriesSrv;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @Slf4j
@@ -49,49 +44,70 @@ public class CategoryCtrl {
         return ResponseEntity.ok().body(categorySrv.getAllCategoriesByLang(langCode));
     }
 
-    @Operation(summary = "Find category by id", description = "Find Category By Id", tags = "Categories")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "successful operation", content = @Content(array = @ArraySchema(schema = @Schema(implementation = CategoryDto.class)))),
-            @ApiResponse(responseCode = "400", description = "Bad request", content = @Content(schema = @Schema(description = "HTTP status error code", example = "400")))
-    }
-    )
-    @GetMapping("/get/{category_id}")
-    public CategoryDto getCategoryById(@PathVariable(name = "category_id") Long category_id) {return categorySrv.getCategoryById(category_id);}
+    @Operation(summary = "Find category by id", description = "Find Category By Id", tags = "Categories", responses = {
+            @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = CategoryDto.class))),
+            @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "404", description = "Not Found", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "500", description = "Bad GATEWAY", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+    })
+    @GetMapping("/{category_id}")
+    public ResponseEntity<CategoryDto> getCategoryById(@PathVariable(name = "category_id") Long category_id) { return ResponseEntity.ok().body(categorySrv.getCategoryById(category_id)); }
 
-    @Operation(summary = "add new category", description = "Add New Category", tags = "Categories")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "successful operation", content = @Content(array = @ArraySchema(schema = @Schema(implementation = CategoryDto
-                    .class)))),
-            @ApiResponse(responseCode = "400", description = "Bad request", content = @Content(schema = @Schema(description = "HTTP status error code", example = "400")))
-    }
-    )
+    @Operation(summary = "Add new Category", description = "Add new category", tags = "Category", responses = {
+            @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = CategoryDto.class))),
+            @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "404", description = "Not Found", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "500", description = "Bad GATEWAY", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+    })
     @PostMapping("/save")
-    public void saveCategory(@RequestBody CategoryDto categoryDto){
+    public ResponseEntity<CategoryDto> saveCategory(@RequestBody CategoryDto categoryDto) throws Exception {
         log.trace("{}", categoryDto);
-        categorySrv.saveCategory(categoryDto);
+        try{
+            return ResponseEntity.ok().body(categorySrv.saveCategory(categoryDto));
+        }catch(RuntimeException ex){
+            throw new NttBadRequestException(ex.getLocalizedMessage());
+        }catch(Exception ex){
+            throw new Exception(ex.getLocalizedMessage());
+        }
     }
 
-    @Operation(summary = "update category", description = "Update Category", tags = "Categories")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "successful operation", content = @Content(array = @ArraySchema(schema = @Schema(implementation = CategoryDto.class)))),
-            @ApiResponse(responseCode = "400", description = "Bad request", content = @Content(schema = @Schema(description = "HTTP status error code", example = "400")))
-    }
-    )
+    @Operation(summary = "Update Category", description = "Update category", tags = "Category", responses = {
+            @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = CategoryDto.class))),
+            @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "404", description = "Not Found", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "500", description = "Bad GATEWAY", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+    })
     @PostMapping("/edit/{category_id}")
-    public void updateCategory(@PathVariable(name = "category_id") Long category_id,@RequestBody CategoryDto categoryDto){
+    public ResponseEntity<CategoryDto> updateCategory(@PathVariable(name = "category_id") Long category_id,@RequestBody CategoryDto categoryDto) throws Exception {
         log.trace("{}", categoryDto);
-        categorySrv.updateCategory(category_id,categoryDto);
+        try{
+            return ResponseEntity.ok().body(categorySrv.updateCategory(category_id,categoryDto));
+        }catch(RuntimeException ex){
+            throw new NttBadRequestException(ex.getLocalizedMessage());
+        }catch(Exception ex){
+            throw new Exception(ex.getLocalizedMessage());
+        }
     }
 
-    @Operation(summary = "delete category", description = "delete Category", tags = "Categories")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "successful operation", content = @Content(array = @ArraySchema(schema = @Schema(implementation = CategoryDto.class)))),
-            @ApiResponse(responseCode = "400", description = "Bad request", content = @Content(schema = @Schema(description = "HTTP status error code", example = "400")))
-    }
-    )
+    @Operation(summary = "Delete Category", description = "Delete category", tags = "Category", responses = {
+            @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = CategoryDto.class))),
+            @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "404", description = "Not Found", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "500", description = "Bad GATEWAY", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+    })
     @PostMapping("/delete/{category_id}")
-    public void removeCategory(@PathVariable(name = "category_id") Long category_id){
+    public void removeCategory(@PathVariable(name = "category_id") Long category_id) throws Exception {
         log.trace("{}", category_id);
-        categorySrv.deleteCategory(category_id);
+        try{
+            categorySrv.deleteCategory(category_id);
+        }catch(RuntimeException ex){
+            throw new NttBadRequestException(ex.getLocalizedMessage());
+        }catch(Exception ex){
+            throw new Exception(ex.getLocalizedMessage());
+        }
     }
 }

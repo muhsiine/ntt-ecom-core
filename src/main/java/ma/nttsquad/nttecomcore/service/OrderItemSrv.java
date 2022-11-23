@@ -7,13 +7,13 @@ import java.util.List;
 
 public interface OrderItemSrv {
 
-    List<OrderItemDto> getAllOrderItems();
+    List<OrderItemDto> getAllOrdersItems();
 
     OrderItemDto getOrderItemById(Long orderItem_id);
 
-    void saveOrderItem(OrderItemDto orderItemDto);
+    OrderItemDto saveOrderItem(OrderItemDto orderItemDto);
 
-    void updateOrderItem(Long orderItem_id, OrderItemDto orderItemDto);
+    OrderItemDto updateOrderItem(Long orderItem_id, OrderItemDto orderItemDto);
 
     void deleteOrderItem(Long orderItem_id);
 }

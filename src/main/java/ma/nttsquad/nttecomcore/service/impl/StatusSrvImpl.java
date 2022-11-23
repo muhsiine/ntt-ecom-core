@@ -3,17 +3,14 @@ package ma.nttsquad.nttecomcore.service.impl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import ma.nttsquad.nttecomcore.dto.StatusDto;
-import ma.nttsquad.nttecomcore.dto.UserDto;
 import ma.nttsquad.nttecomcore.exception.NttNotFoundException;
 import ma.nttsquad.nttecomcore.mapper.StatusMapper;
-import ma.nttsquad.nttecomcore.mapper.UserMapper;
 import ma.nttsquad.nttecomcore.model.repository.StatusRepository;
 import ma.nttsquad.nttecomcore.service.StatusSrv;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -26,10 +23,14 @@ public class StatusSrvImpl implements StatusSrv {
 
     @Override
     public List<StatusDto> getAllStatus() {
-        return statusRepository.findAll()
+        List<StatusDto> allStatusDTO = statusRepository.findAll()
                 .stream()
                 .map(StatusMapper.INSTANCE::entityToDto)
-                .collect(Collectors.toList());
+                .toList();
+        if(allStatusDTO == null || allStatusDTO.isEmpty()){
+            throw new NttNotFoundException("There's no status in database");
+        }
+        return allStatusDTO;
     }
 
     @Override
@@ -41,25 +42,23 @@ public class StatusSrvImpl implements StatusSrv {
     }
 
     @Override
-    public void saveStatus(StatusDto statusDto) {
-        log.trace("start save status: {}",statusDto);
-        statusRepository.save(StatusMapper.INSTANCE.dtoToEntity(statusDto));
-        log.trace("end save status");
+    public StatusDto saveStatus(StatusDto statusDto) {
+        log.trace("save status: {}",statusDto);
+        return StatusMapper.INSTANCE.entityToDto(statusRepository.save(StatusMapper.INSTANCE.dtoToEntity(statusDto)));
     }
 
     @Override
-    public void updateStatus(Long status_id, StatusDto statusDto) {
-        log.trace("start update status: {} {}",status_id, statusDto);
+    public StatusDto updateStatus(Long status_id, StatusDto statusDto) {
+        log.trace("update status: {} , {}",status_id, statusDto);
         StatusDto status = getStatusById(status_id);
         statusDto.setId(status.getId());
-        statusRepository.save(StatusMapper.INSTANCE.dtoToEntity(statusDto));
-        log.trace("end update status: {}",status_id);
+        return StatusMapper.INSTANCE.entityToDto(statusRepository.save(StatusMapper.INSTANCE.dtoToEntity(statusDto)));
     }
 
     @Override
     public void deleteStatus(Long status_id) {
-        log.trace("start delete status: {}",status_id);
+        log.trace("delete status: {}",status_id);
         statusRepository.deleteById(status_id);
-        log.trace("end delete status: {}",status_id);
     }
+
 }

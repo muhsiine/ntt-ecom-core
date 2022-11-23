@@ -12,7 +12,6 @@ import ma.nttsquad.nttecomcore.mapper.CartMapper;
 import ma.nttsquad.nttecomcore.model.repository.CartItemRepository;
 import ma.nttsquad.nttecomcore.model.repository.CartRepository;
 import ma.nttsquad.nttecomcore.service.CartItemSrv;
-import ma.nttsquad.nttecomcore.service.CartSrv;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -27,10 +26,14 @@ public class CartItemSrvImpl implements CartItemSrv {
 
     @Override
     public List<CartItemDto> getAllCartItems() {
-        return cartItemRepository.findAll()
+        List<CartItemDto> allCartItemDTO = cartItemRepository.findAll()
                 .stream()
                 .map(CartItemMapper.INSTANCE::entityToDto)
-                .collect(Collectors.toList());
+                .toList();
+        if(allCartItemDTO == null || allCartItemDTO.isEmpty()){
+            throw new NttNotFoundException("There's no cart items in database");
+        }
+        return allCartItemDTO;
     }
 
     @Override
@@ -42,25 +45,22 @@ public class CartItemSrvImpl implements CartItemSrv {
     }
 
     @Override
-    public void saveCartItem(CartItemDto cartItemDto) {
-        log.trace("start save cart item: {}",cartItemDto);
-        cartItemRepository.save(CartItemMapper.INSTANCE.dtoToEntity(cartItemDto));
-        log.trace("end save cart item");
+    public CartItemDto saveCartItem(CartItemDto cartItemDto) {
+        log.trace("save cart item: {}",cartItemDto);
+        return CartItemMapper.INSTANCE.entityToDto(cartItemRepository.save(CartItemMapper.INSTANCE.dtoToEntity(cartItemDto)));
     }
 
     @Override
-    public void updateCartItem(Long cartItem_id, CartItemDto cartItemDto) {
-        log.trace("start update cart item: {} {}",cartItem_id, cartItemDto);
+    public CartItemDto updateCartItem(Long cartItem_id, CartItemDto cartItemDto) {
+        log.trace("update cart item: {} {}",cartItem_id, cartItemDto);
         CartItemDto cartItem = getCartItemById(cartItem_id);
         cartItemDto.setId(cartItem.getId());
-        cartItemRepository.save(CartItemMapper.INSTANCE.dtoToEntity(cartItemDto));
-        log.trace("end update cart item: {}",cartItem_id);
+        return CartItemMapper.INSTANCE.entityToDto(cartItemRepository.save(CartItemMapper.INSTANCE.dtoToEntity(cartItemDto)));
     }
 
     @Override
     public void deleteCartItem(Long cartItem_id) {
-        log.trace("start delete cart item: {}",cartItem_id);
+        log.trace("delete cart item: {}",cartItem_id);
         cartItemRepository.deleteById(cartItem_id);
-        log.trace("end delete cart item: {}",cartItem_id);
     }
 }

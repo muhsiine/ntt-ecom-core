@@ -11,9 +11,9 @@ public interface StatusSrv {
 
     StatusDto getStatusById(Long status_id);
 
-    void saveStatus(StatusDto statusDto);
+    StatusDto saveStatus(StatusDto statusDto);
 
-    void updateStatus(Long status_id, StatusDto statusDto);
+    StatusDto updateStatus(Long status_id, StatusDto statusDto);
 
     void deleteStatus(Long status_id);
 }

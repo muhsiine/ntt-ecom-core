@@ -15,9 +15,9 @@ public interface CategoriesSrv {
 
     CategoryDto getCategoryById(Long category_id);
 
-    void saveCategory(CategoryDto categoryDto);
+    CategoryDto saveCategory(CategoryDto categoryDto);
 
-    void updateCategory(Long category_id, CategoryDto categoryDto);
+    CategoryDto updateCategory(Long category_id, CategoryDto categoryDto);
 
     void deleteCategory(Long category_id);
 

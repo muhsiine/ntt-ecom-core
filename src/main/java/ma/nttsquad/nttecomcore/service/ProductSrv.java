@@ -1,6 +1,7 @@
 package ma.nttsquad.nttecomcore.service;
 
 import ma.nttsquad.nttecomcore.dto.ProductDto;
+import ma.nttsquad.nttecomcore.dto.ProductFilterDto;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -14,7 +15,7 @@ public interface ProductSrv {
 
     List<ProductDto> getProductByCategoryId(Long categoryId);
 
-    void updateProduct(Long product_id,ProductDto productDto);
+    ProductDto updateProduct(Long product_id,ProductDto productDto);
 
     void deleteProduct(Long productId);
 

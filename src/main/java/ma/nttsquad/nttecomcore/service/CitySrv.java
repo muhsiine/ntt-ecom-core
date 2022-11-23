@@ -10,9 +10,9 @@ public interface CitySrv {
 
     CityDto getCityById(Long city_id);
 
-    void saveCity(CityDto cityDto);
+    CityDto saveCity(CityDto cityDto);
 
-    void updateCity(Long city_id, CityDto cityDto);
+    CityDto updateCity(Long city_id, CityDto cityDto);
 
     void deleteCity(Long city_id);
 }

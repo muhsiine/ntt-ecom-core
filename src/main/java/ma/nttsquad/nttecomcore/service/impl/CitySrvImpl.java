@@ -3,8 +3,10 @@ package ma.nttsquad.nttecomcore.service.impl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import ma.nttsquad.nttecomcore.dto.CityDto;
+import ma.nttsquad.nttecomcore.dto.CountryDto;
 import ma.nttsquad.nttecomcore.exception.NttNotFoundException;
 import ma.nttsquad.nttecomcore.mapper.CityMapper;
+import ma.nttsquad.nttecomcore.mapper.CountryMapper;
 import ma.nttsquad.nttecomcore.model.repository.CityRepository;
 import ma.nttsquad.nttecomcore.service.CitySrv;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,10 +26,14 @@ public class CitySrvImpl implements CitySrv {
 
     @Override
     public List<CityDto> getAllCities() {
-        return cityRepository.findAll()
+        List<CityDto> AllCityItemDTO = cityRepository.findAll()
                 .stream()
                 .map(CityMapper.INSTANCE::entityToDto)
-                .collect(Collectors.toList());
+                .toList();
+        if(AllCityItemDTO == null || AllCityItemDTO.isEmpty()){
+            throw new NttNotFoundException("There's no cities in database");
+        }
+        return AllCityItemDTO;
     }
 
     @Override
@@ -35,30 +41,27 @@ public class CitySrvImpl implements CitySrv {
         log.trace("{}", city_id);
         return cityRepository.findById(city_id)
                 .map(CityMapper.INSTANCE::entityToDto)
-                .orElseThrow(() -> new NttNotFoundException("There's no address with the id '%d'".formatted(city_id)));
+                .orElseThrow(() -> new NttNotFoundException("There's no city with the id '%d'".formatted(city_id)));
 
     }
 
     @Override
-    public void saveCity(CityDto cityDto) {
-        log.trace("start save city: {}",cityDto);
-        cityRepository.save(CityMapper.INSTANCE.dtoToEntity(cityDto));
-        log.trace("end save city");
+    public CityDto saveCity(CityDto cityDto) {
+        log.trace("save city: {}",cityDto);
+        return CityMapper.INSTANCE.entityToDto(cityRepository.save(CityMapper.INSTANCE.dtoToEntity(cityDto)));
     }
 
     @Override
-    public void updateCity(Long city_id, CityDto cityDto) {
-        log.trace("start update city: {} {}",city_id, cityDto);
+    public CityDto updateCity(Long city_id, CityDto cityDto) {
+        log.trace("update city: {} {}",city_id, cityDto);
         CityDto city = getCityById(city_id);
         cityDto.setId(city.getId());
-        cityRepository.save(CityMapper.INSTANCE.dtoToEntity(cityDto));
-        log.trace("end update city: {}",city_id);
+        return CityMapper.INSTANCE.entityToDto(cityRepository.save(CityMapper.INSTANCE.dtoToEntity(cityDto)));
     }
 
     @Override
     public void deleteCity(Long city_id) {
-        log.trace("start delete city: {}",city_id);
+        log.trace("delete city: {}",city_id);
         cityRepository.deleteById(city_id);
-        log.trace("end delete city: {}",city_id);
     }
 }

@@ -11,9 +11,9 @@ public interface CartItemSrv {
 
     CartItemDto getCartItemById(Long cartItem_id);
 
-    void saveCartItem(CartItemDto cartItemDto);
+    CartItemDto saveCartItem(CartItemDto cartItemDto);
 
-    void updateCartItem(Long cartItem_id, CartItemDto cartItemDto);
+    CartItemDto updateCartItem(Long cartItem_id, CartItemDto cartItemDto);
 
     void deleteCartItem(Long cartItem_id);
 }

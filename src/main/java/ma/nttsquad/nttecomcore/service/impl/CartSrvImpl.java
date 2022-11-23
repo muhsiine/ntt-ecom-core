@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import ma.nttsquad.nttecomcore.dto.CartDto;
 import ma.nttsquad.nttecomcore.dto.CartItemDto;
 import ma.nttsquad.nttecomcore.exception.NttNotFoundException;
+import ma.nttsquad.nttecomcore.mapper.CartItemMapper;
 import ma.nttsquad.nttecomcore.mapper.CartMapper;
 import ma.nttsquad.nttecomcore.model.repository.CartItemRepository;
 import ma.nttsquad.nttecomcore.model.repository.CartRepository;
@@ -13,7 +14,6 @@ import ma.nttsquad.nttecomcore.service.CartSrv;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -32,7 +32,7 @@ public class CartSrvImpl implements CartSrv {
                 .map(CartMapper.INSTANCE::entityToDto)
                 .toList();
         if(allCartDTO == null || allCartDTO.isEmpty()){
-            throw new NttNotFoundException("There's no cart in data base");
+            throw new NttNotFoundException("There's no carts in database");
         }
         return allCartDTO;
     }
@@ -48,7 +48,6 @@ public class CartSrvImpl implements CartSrv {
     @Override
     public CartDto getCartById(Long id) {
         log.trace("{}", id);
-
         return cartRepository.findById(id)
                 .map(CartMapper.INSTANCE::entityToDto)
                 .orElseThrow(() -> new NttNotFoundException("There's no cart with the id '%d'".formatted(id)));
@@ -66,7 +65,7 @@ public class CartSrvImpl implements CartSrv {
 
     @Override
     public CartDto saveCart(CartDto cartDto) {
-        log.trace("{}", cartDto);
+        log.trace("save cart: {}", cartDto);
         return CartMapper.INSTANCE.entityToDto(cartRepository.save(CartMapper.INSTANCE.dtoToEntity(cartDto)));
     }
 
@@ -84,12 +83,11 @@ public class CartSrvImpl implements CartSrv {
     }
 
     @Override
-    public void updateCart(Long cart_id, CartDto cartDto) {
-        log.trace("start update cart: {} {}",cart_id, cartDto);
+    public CartDto updateCart(Long cart_id, CartDto cartDto) {
+        log.trace("update cart: {} {}",cart_id, cartDto);
         CartDto cart = getCartById(cart_id);
         cartDto.setId(cart.getId());
-        cartRepository.save(CartMapper.INSTANCE.dtoToEntity(cartDto));
-        log.trace("end update cart: {} {}",cart_id, cart);
+        return CartMapper.INSTANCE.entityToDto(cartRepository.save(CartMapper.INSTANCE.dtoToEntity(cartDto)));
     }
 
     @Override
@@ -131,8 +129,7 @@ public class CartSrvImpl implements CartSrv {
 
     @Override
     public void deleteCart(Long cart_id) {
-        log.trace("start delete cart: {}",cart_id);
+        log.trace("delete cart: {}",cart_id);
         cartItemRepository.deleteById(cart_id);
-        log.trace("end delete cart: {}",cart_id);
     }
 }

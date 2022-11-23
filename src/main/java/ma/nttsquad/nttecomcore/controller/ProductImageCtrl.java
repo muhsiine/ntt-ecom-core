@@ -5,13 +5,11 @@ import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import lombok.RequiredArgsConstructor;
-import ma.nttsquad.nttecomcore.dto.CartDto;
+import lombok.extern.slf4j.Slf4j;
 import ma.nttsquad.nttecomcore.dto.ProductImageDto;
+import ma.nttsquad.nttecomcore.exception.NttBadRequestException;
 import ma.nttsquad.nttecomcore.exception.records.ErrorResponse;
-import ma.nttsquad.nttecomcore.model.Product;
 import ma.nttsquad.nttecomcore.service.ProductImageSrv;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -43,59 +41,83 @@ public class ProductImageCtrl {
         return ResponseEntity.ok().body(productImageSrv.getImageByProduct(productId));
     }
 
-    @Operation(summary = "Find all products images", description = "Find all Products Images", tags = "Image")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "successful operation", content = @Content(array = @ArraySchema(schema = @Schema(implementation = ProductImageDto.class)))),
-            @ApiResponse(responseCode = "400", description = "Bad request", content = @Content(schema = @Schema(description = "HTTP status error code", example = "400")))
-    }
-    )
+    @Operation(summary = "Find all products images", description = "Find all products images", tags = "Image", responses = {
+            @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = ProductImageDto.class))),
+            @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "404", description = "Not Found", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "500", description = "Bad GATEWAY", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+    })
     @GetMapping("/all")
     public List<ProductImageDto> getAll(){
-        return productImageSrv.getAllProductsImages();
+        return (List<ProductImageDto>) ResponseEntity.ok().body(productImageSrv.getAllProductsImages());
     }
 
-    @Operation(summary = "Find product image by id", description = "Find Procut Image By Id", tags = "Image")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "successful operation", content = @Content(array = @ArraySchema(schema = @Schema(implementation = ProductImageDto.class)))),
-            @ApiResponse(responseCode = "400", description = "Bad request", content = @Content(schema = @Schema(description = "HTTP status error code", example = "400")))
-    }
-    )
-    @GetMapping("/get/{productImg_id}")
-    public ProductImageDto getProductImageById(@PathVariable(name = "productImg_id") Long productImg_id) {return productImageSrv.getProductImageById(productImg_id);}
+    @Operation(summary = "Find product image by id", description = "Find product image by id", tags = "Image", responses = {
+            @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = ProductImageDto.class))),
+            @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "404", description = "Not Found", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "500", description = "Bad GATEWAY", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+    })
+    @GetMapping("/{productImg_id}")
+    public ResponseEntity<ProductImageDto> getProductImageById(@PathVariable(name = "productImg_id") Long productImg_id) {return ResponseEntity.ok().body(productImageSrv.getProductImageById(productImg_id));}
 
-    @Operation(summary = "add new product image", description = "Add New Product Image", tags = "Image")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "successful operation", content = @Content(array = @ArraySchema(schema = @Schema(implementation = ProductImageDto.class)))),
-            @ApiResponse(responseCode = "400", description = "Bad request", content = @Content(schema = @Schema(description = "HTTP status error code", example = "400")))
-    }
-    )
+    @Operation(summary = "Add new Product Image", description = "Add new product image", tags = "Image", responses = {
+            @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = ProductImageDto.class))),
+            @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "404", description = "Not Found", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "500", description = "Bad GATEWAY", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+    })
     @PostMapping("/save")
-    public void saveProductImage(@RequestBody ProductImageDto productImageDto){
+    public ResponseEntity<ProductImageDto> saveProductImage(@RequestBody ProductImageDto productImageDto) throws Exception {
         log.trace("{}", productImageDto);
-        productImageSrv.saveProductImage(productImageDto);
+        try{
+            return ResponseEntity.ok().body(productImageSrv.saveProductImage(productImageDto));
+        }catch(RuntimeException ex){
+            throw new NttBadRequestException(ex.getLocalizedMessage());
+        }catch(Exception ex){
+            throw new Exception(ex.getLocalizedMessage());
+        }
     }
 
-    @Operation(summary = "update product image", description = "Update Product Image", tags = "Image")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "successful operation", content = @Content(array = @ArraySchema(schema = @Schema(implementation = ProductImageDto.class)))),
-            @ApiResponse(responseCode = "400", description = "Bad request", content = @Content(schema = @Schema(description = "HTTP status error code", example = "400")))
-    }
-    )
+    @Operation(summary = "Update Product Image", description = "Update product image", tags = "Image", responses = {
+            @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = ProductImageDto.class))),
+            @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "404", description = "Not Found", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "500", description = "Bad GATEWAY", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+    })
     @PostMapping("/edit/{productImg_id}")
-    public void updateProductImage(@PathVariable(name = "productImg_id") Long productImg_id,@RequestBody ProductImageDto productImageDto){
+    public ResponseEntity<ProductImageDto> updateProductImage(@PathVariable(name = "productImg_id") Long productImg_id,@RequestBody ProductImageDto productImageDto) throws Exception {
         log.trace("{}", productImageDto);
-        productImageSrv.updateProductImage(productImg_id,productImageDto);
+        try{
+            return ResponseEntity.ok().body(productImageSrv.updateProductImage(productImg_id,productImageDto));
+        }catch(RuntimeException ex){
+            throw new NttBadRequestException(ex.getLocalizedMessage());
+        }catch(Exception ex){
+            throw new Exception(ex.getLocalizedMessage());
+        }
     }
 
-    @Operation(summary = "delete product image", description = "delete Product Image", tags = "Image")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "successful operation", content = @Content(array = @ArraySchema(schema = @Schema(implementation = ProductImageDto.class)))),
-            @ApiResponse(responseCode = "400", description = "Bad request", content = @Content(schema = @Schema(description = "HTTP status error code", example = "400")))
-    }
-    )
+    @Operation(summary = "Delete Product Image", description = "Delete product image", tags = "Image", responses = {
+            @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = ProductImageDto.class))),
+            @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "404", description = "Not Found", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "500", description = "Bad GATEWAY", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+    })
     @PostMapping("/delete/{productImg_id}")
-    public void removeProductImage(@PathVariable(name = "productImg_id") Long productImg_id){
+    public void removeProductImage(@PathVariable(name = "productImg_id") Long productImg_id) throws Exception {
         log.trace("{}", productImg_id);
-        productImageSrv.deleteProductImage(productImg_id);
+        try{
+            productImageSrv.deleteProductImage(productImg_id);
+        }catch(RuntimeException ex){
+            throw new NttBadRequestException(ex.getLocalizedMessage());
+        }catch(Exception ex){
+            throw new Exception(ex.getLocalizedMessage());
+        }
+
     }
 }

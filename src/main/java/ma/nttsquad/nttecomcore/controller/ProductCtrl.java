@@ -7,19 +7,16 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import ma.nttsquad.nttecomcore.dto.CartDto;
 import ma.nttsquad.nttecomcore.dto.ProductDto;
+import ma.nttsquad.nttecomcore.dto.ProductFilterDto;
 import ma.nttsquad.nttecomcore.exception.NttBadRequestException;
 import ma.nttsquad.nttecomcore.exception.records.ErrorResponse;
-import ma.nttsquad.nttecomcore.dto.ProductFilterDto;
 import ma.nttsquad.nttecomcore.model.Product;
 import ma.nttsquad.nttecomcore.service.ProductSrv;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
@@ -41,7 +38,6 @@ public class ProductCtrl {
     })
     @GetMapping(value={"/all"})
     public ResponseEntity<List<ProductDto>> getAllProducts(){
-
         return ResponseEntity.ok().body(productSrv.getAllProducts());
     }
 
@@ -70,7 +66,7 @@ public class ProductCtrl {
         return ResponseEntity.ok().body(productSrv.getProductByCategoryId(categoryId));
     }
 
-    @Operation(summary = "Save Product", description = "Save Product", tags = "Product", responses = {
+    @Operation(summary = "Save Product", description = "Save product", tags = "Product", responses = {
             @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = ProductDto.class))),
             @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
             @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
@@ -79,6 +75,7 @@ public class ProductCtrl {
     })
     @PostMapping("/save")
     public ResponseEntity<ProductDto> saveProduct(@RequestBody ProductDto productDto) throws Exception {
+        log.trace("{}", productDto);
         try{
             return ResponseEntity.ok().body(productSrv.saveProduct(productDto));
         }catch(RuntimeException ex){
@@ -100,16 +97,23 @@ public class ProductCtrl {
         return ResponseEntity.ok(productSrv.filter(productFilterDto));
     }
 
-    @Operation(summary = "update product", description = "Update Product", tags = "Product")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "successful operation", content = @Content(array = @ArraySchema(schema = @Schema(implementation = ProductDto.class)))),
-            @ApiResponse(responseCode = "400", description = "Bad request", content = @Content(schema = @Schema(description = "HTTP status error code", example = "400")))
-    }
-    )
+    @Operation(summary = "Update Product", description = "Update product", tags = "Product", responses = {
+            @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = ProductDto.class))),
+            @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "404", description = "Not Found", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "500", description = "Bad GATEWAY", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+    })
     @PostMapping("/edit/{product_id}")
-    public void updatProduct(@PathVariable(name = "product_id") Long product_id,@RequestBody ProductDto productDto){
+    public ResponseEntity<ProductDto> updatProduct(@PathVariable(name = "product_id") Long product_id, @RequestBody ProductDto productDto) throws Exception {
         log.trace("{}", productDto);
-        productSrv.updateProduct(product_id,productDto);
+        try{
+            return ResponseEntity.ok().body(productSrv.updateProduct(product_id,productDto));
+        }catch(RuntimeException ex){
+            throw new NttBadRequestException(ex.getLocalizedMessage());
+        }catch(Exception ex){
+            throw new Exception(ex.getLocalizedMessage());
+        }
     }
 
     @Operation(summary = "delete product", description = "delete Product", tags = "Product")
@@ -119,8 +123,15 @@ public class ProductCtrl {
     }
     )
     @PostMapping("/delete/{product_id}")
-    public void deleteProduct(@PathVariable("product_id") Long product_id){
-        productSrv.deleteProduct(product_id);
+    public void deleteProduct(@PathVariable("product_id") Long product_id) throws Exception {
+        log.trace("{}", product_id);
+        try{
+            productSrv.deleteProduct(product_id);
+        }catch(RuntimeException ex){
+            throw new NttBadRequestException(ex.getLocalizedMessage());
+        }catch(Exception ex){
+            throw new Exception(ex.getLocalizedMessage());
+        }
     }
 
 

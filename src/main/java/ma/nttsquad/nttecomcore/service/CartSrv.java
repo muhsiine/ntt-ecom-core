@@ -20,7 +20,7 @@ public interface CartSrv {
 
     CartDto addItemsToCart(List<CartItemDto> cartItems, Long cartId);
 
-    void updateCart(Long cart_id, CartDto cartDto);
+    CartDto updateCart(Long cart_id, CartDto cartDto);
 
     //void removeItemsFromCart(Long cart_id, List<Long> cartItem_id);
     CartDto removeItemsFromCart(Long cartId, List<Long> cartItemId);

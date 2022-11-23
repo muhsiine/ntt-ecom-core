@@ -11,9 +11,9 @@ public interface AddressSrv {
 
     AddressDto getAddressById(Long addresss_id);
 
-    void saveAddress(AddressDto addressDto);
+    AddressDto saveAddress(AddressDto addressDto);
 
-    void updateAddress(Long addresss_id, AddressDto addressDto);
+    AddressDto updateAddress(Long addresss_id, AddressDto addressDto);
 
     void deleteAddress(Long addresss_id);
 }

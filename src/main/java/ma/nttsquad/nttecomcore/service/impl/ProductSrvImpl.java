@@ -2,10 +2,7 @@ package ma.nttsquad.nttecomcore.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import lombok.RequiredArgsConstructor;
 import ma.nttsquad.nttecomcore.dto.ProductDto;
-import ma.nttsquad.nttecomcore.exception.NttNotFoundException;
-import ma.nttsquad.nttecomcore.exception.NttNotFoundException;
 import ma.nttsquad.nttecomcore.dto.ProductFilterDto;
 import ma.nttsquad.nttecomcore.exception.NttNotFoundException;
 import ma.nttsquad.nttecomcore.mapper.ProductMapper;
@@ -15,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -33,7 +29,7 @@ public class ProductSrvImpl implements ProductSrv {
                                             .map(ProductMapper.INSTANCE::entityToDto)
                                             .toList();
         if(allProducts == null || allProducts.isEmpty()){
-            throw new NttNotFoundException("There's no Products in data base");
+            throw new NttNotFoundException("There's no products in database");
         }
         return allProducts;
     }
@@ -61,26 +57,23 @@ public class ProductSrvImpl implements ProductSrv {
 
 
     @Override
-    public void saveProduct(ProductDto productDto) {
-        log.trace("start save product: {}",productDto);
-        productRepository.save(ProductMapper.INSTANCE.dtoToEntity(productDto));
-        log.trace("end save product");
+    public ProductDto saveProduct(ProductDto productDto) {
+        log.trace("save product: {}",productDto);
+        return ProductMapper.INSTANCE.entityToDto(productRepository.save(ProductMapper.INSTANCE.dtoToEntity(productDto)));
     }
 
     @Override
-    public void updateProduct(Long product_id, ProductDto productDto) {
-        log.trace("start update product: {} {}",product_id, productDto);
+    public ProductDto updateProduct(Long product_id, ProductDto productDto) {
+        log.trace("update product: {} , {}",product_id, productDto);
         ProductDto product = getProductById(product_id);
         productDto.setId(product.getId());
-        productRepository.save(ProductMapper.INSTANCE.dtoToEntity(productDto));
-        log.trace("end update product: {}",product_id);
+        return ProductMapper.INSTANCE.entityToDto(productRepository.save(ProductMapper.INSTANCE.dtoToEntity(productDto)));
     }
 
     @Override
     public void deleteProduct(Long product_id) {
-        log.trace("start delete product: {}",product_id);
+        log.trace("delete product: {}",product_id);
         productRepository.deleteById(product_id);
-        log.trace("end delete product: {}",product_id);
     }
     @Override
     public List<ProductDto> filter(ProductFilterDto productFilterDto) {

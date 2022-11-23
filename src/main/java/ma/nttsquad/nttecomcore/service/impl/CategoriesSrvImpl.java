@@ -4,10 +4,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import ma.nttsquad.nttecomcore.cons.LangCons;
 import ma.nttsquad.nttecomcore.dto.CategoryByLangDto;
-import ma.nttsquad.nttecomcore.exception.NttNotFoundException;
 import ma.nttsquad.nttecomcore.dto.CategoryDto;
 import ma.nttsquad.nttecomcore.exception.NttNotFoundException;
-import ma.nttsquad.nttecomcore.mapper.AddressMapper;
 import ma.nttsquad.nttecomcore.mapper.CategoriesMapper;
 import ma.nttsquad.nttecomcore.mapper.CategoryByLangMapper;
 import ma.nttsquad.nttecomcore.model.repository.CategoryByLangRepository;
@@ -40,10 +38,14 @@ public class CategoriesSrvImpl implements CategoriesSrv {
 
     @Override
     public List<CategoryDto> getAllCategories() {
-        return categoryRepository.findAll()
+        List<CategoryDto> AllCategorytemDTO = categoryRepository.findAll()
                 .stream()
                 .map(CategoriesMapper.INSTANCE::entityToDto)
-                .collect(Collectors.toList());
+                .toList();
+        if(AllCategorytemDTO == null || AllCategorytemDTO.isEmpty()){
+            throw new NttNotFoundException("There's no categories in database");
+        }
+        return AllCategorytemDTO;
     }
 
     @Override
@@ -55,25 +57,23 @@ public class CategoriesSrvImpl implements CategoriesSrv {
     }
 
     @Override
-    public void saveCategory(CategoryDto categoryDto) {
-        log.trace("start save category: {}",categoryDto);
-        categoryRepository.save(CategoriesMapper.INSTANCE.dtoToEntity(categoryDto));
-        log.trace("end save category");
+    public CategoryDto saveCategory(CategoryDto categoryDto) {
+        log.trace("save category: {}",categoryDto);
+        return CategoriesMapper.INSTANCE.entityToDto(categoryRepository.save(CategoriesMapper.INSTANCE.dtoToEntity(categoryDto)));
     }
 
     @Override
-    public void updateCategory(Long category_id, CategoryDto categoryDto) {
-        log.trace("start update category: {} {}",category_id, categoryDto);
+    public CategoryDto updateCategory(Long category_id, CategoryDto categoryDto) {
+        log.trace("update category: {} {}",category_id, categoryDto);
         CategoryDto category = getCategoryById(category_id);
         categoryDto.setId(category.getId());
-        categoryRepository.save(CategoriesMapper.INSTANCE.dtoToEntity(categoryDto));
-        log.trace("end update category: {}",category_id);
+        return CategoriesMapper.INSTANCE.entityToDto(categoryRepository.save(CategoriesMapper.INSTANCE.dtoToEntity(categoryDto)));
     }
+
 
     @Override
     public void deleteCategory(Long category_id) {
-        log.trace("start delete category: {}",category_id);
+        log.trace("delete category: {}",category_id);
         categoryRepository.deleteById(category_id);
-        log.trace("end delete category: {}",category_id);
     }
 }

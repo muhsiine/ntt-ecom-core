@@ -10,9 +10,9 @@ public interface CountrySrv {
 
     CountryDto getCountryById(Long country_id);
 
-    void saveCountry(CountryDto countryDto);
+    CountryDto saveCountry(CountryDto countryDto);
 
-    void updateCountry(Long country_id, CountryDto countryDto);
+    CountryDto updateCountry(Long country_id, CountryDto countryDto);
 
     void deleteCountry(Long country_id);
 }

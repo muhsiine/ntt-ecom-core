@@ -1,8 +1,10 @@
 package ma.nttsquad.nttecomcore.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import ma.nttsquad.nttecomcore.dto.OrderDto;
 import ma.nttsquad.nttecomcore.exception.NttNotFoundException;
+import ma.nttsquad.nttecomcore.mapper.OrderItemMapper;
 import ma.nttsquad.nttecomcore.mapper.OrderMapper;
 import ma.nttsquad.nttecomcore.model.repository.OrderRepository;
 import ma.nttsquad.nttecomcore.service.OrderSrv;
@@ -53,26 +55,23 @@ public class OrderSrvImpl implements OrderSrv {
     }
 
     @Override
-    public void saveOrder(OrderDto orderDto) {
-        log.trace("start save order: {}",orderDto);
-        orderRepository.save(OrderMapper.INSTANCE.dtoToEntity(orderDto));
-        log.trace("end save order");
+    public OrderDto saveOrder(OrderDto orderDto) {
+        log.trace("save order: {}",orderDto);
+        return OrderMapper.INSTANCE.entityToDto(orderRepository.save(OrderMapper.INSTANCE.dtoToEntity(orderDto)));
     }
 
     @Override
-    public void updateOrder(Long order_id, OrderDto orderDto) {
-        log.trace("start update order: {} {}",order_id, orderDto);
+    public OrderDto updateOrder(Long order_id, OrderDto orderDto) {
+        log.trace("update order: {} {}",order_id, orderDto);
         OrderDto order = getOrderById(order_id);
         orderDto.setId(order.getId());
-        orderRepository.save(OrderMapper.INSTANCE.dtoToEntity(orderDto));
-        log.trace("end update order: {}",order_id);
+        return OrderMapper.INSTANCE.entityToDto(orderRepository.save(OrderMapper.INSTANCE.dtoToEntity(orderDto)));
     }
 
     @Override
     public void deleteOrder(Long order_id) {
-        log.trace("start delete order: {}",order_id);
+        log.trace("delete order: {}",order_id);
         orderRepository.deleteById(order_id);
-        log.trace("end delete order: {}",order_id);
     }
 
 }

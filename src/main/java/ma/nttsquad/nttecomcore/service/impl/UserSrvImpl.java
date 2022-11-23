@@ -3,13 +3,14 @@ package ma.nttsquad.nttecomcore.service.impl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import ma.nttsquad.nttecomcore.dto.AddressDto;
+import ma.nttsquad.nttecomcore.dto.CartDto;
 import ma.nttsquad.nttecomcore.dto.UserDto;
 import ma.nttsquad.nttecomcore.exception.NttNotFoundException;
 import ma.nttsquad.nttecomcore.mapper.AddressMapper;
+import ma.nttsquad.nttecomcore.mapper.CartMapper;
 import ma.nttsquad.nttecomcore.mapper.UserMapper;
 import ma.nttsquad.nttecomcore.model.repository.AddressRepository;
 import ma.nttsquad.nttecomcore.model.repository.UserRepository;
-import ma.nttsquad.nttecomcore.service.AddressSrv;
 import ma.nttsquad.nttecomcore.service.UserSrv;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,10 +29,14 @@ public class UserSrvImpl implements UserSrv {
 
     @Override
     public List<UserDto> getAllUsers() {
-        return userRepository.findAll()
+        List<UserDto> allUserDTO = userRepository.findAll()
                 .stream()
                 .map(UserMapper.INSTANCE::entityToDto)
-                .collect(Collectors.toList());
+                .toList();
+        if(allUserDTO == null || allUserDTO.isEmpty()){
+            throw new NttNotFoundException("There's no users in database");
+        }
+        return allUserDTO;
     }
 
     @Override
@@ -43,25 +48,22 @@ public class UserSrvImpl implements UserSrv {
     }
 
     @Override
-    public void saveUser(UserDto userDto) {
-        log.trace("start save user: {}",userDto);
-        userRepository.save(UserMapper.INSTANCE.dtoToEntity(userDto));
-        log.trace("end save user");
+    public UserDto saveUser(UserDto userDto) {
+        log.trace("save user: {}",userDto);
+        return UserMapper.INSTANCE.entityToDto(userRepository.save(UserMapper.INSTANCE.dtoToEntity(userDto)));
     }
 
     @Override
-    public void updateUser(Long user_id, UserDto userDto) {
-        log.trace("start update user: {} {}",user_id, userDto);
+    public UserDto updateUser(Long user_id, UserDto userDto) {
+        log.trace("update user: {} , {}",user_id, userDto);
         UserDto user = getUserById(user_id);
         userDto.setId(user.getId());
-        userRepository.save(UserMapper.INSTANCE.dtoToEntity(userDto));
-        log.trace("end update user: {}",user_id);
+        return UserMapper.INSTANCE.entityToDto(userRepository.save(UserMapper.INSTANCE.dtoToEntity(userDto)));
     }
 
     @Override
     public void deleteUser(Long user_id) {
-        log.trace("start delete user: {}",user_id);
+        log.trace("delete user: {}",user_id);
         userRepository.deleteById(user_id);
-        log.trace("end delete user: {}",user_id);
     }
 }

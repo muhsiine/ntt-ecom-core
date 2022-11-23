@@ -5,13 +5,15 @@ import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import ma.nttsquad.nttecomcore.dto.AddressDto;
+import ma.nttsquad.nttecomcore.exception.NttBadRequestException;
+import ma.nttsquad.nttecomcore.exception.records.ErrorResponse;
 import ma.nttsquad.nttecomcore.service.AddressSrv;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -26,59 +28,82 @@ public class AddressCtrl {
     @Autowired
     final AddressSrv addressSrv;
 
-    @Operation(summary = "Find all addresses", description = "Find all addresses", tags = "Address")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "successful operation", content = @Content(array = @ArraySchema(schema = @Schema(implementation = AddressDto.class)))),
-            @ApiResponse(responseCode = "400", description = "Bad request", content = @Content(schema = @Schema(description = "HTTP status error code", example = "400")))
-    }
-    )
+    @Operation(summary = "Find all addresses", description = "Find all addresses", tags = "Address", responses = {
+            @ApiResponse(responseCode = "200", description = "OK", content = @Content(array = @ArraySchema(schema = @Schema(implementation = AddressDto.class)))),
+            @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "404", description = "Not Found", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "500", description = "Bad GATEWAY", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+    })
     @GetMapping("/all")
-    public List<AddressDto> getAll(){
-        return addressSrv.getAllAddresses();
+    public ResponseEntity<List<AddressDto>> getAll(){
+        return ResponseEntity.ok().body(addressSrv.getAllAddresses());
     }
 
-    @Operation(summary = "Find address by id", description = "Find Address By Id", tags = "Address")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "successful operation", content = @Content(array = @ArraySchema(schema = @Schema(implementation = AddressDto.class)))),
-            @ApiResponse(responseCode = "400", description = "Bad request", content = @Content(schema = @Schema(description = "HTTP status error code", example = "400")))
-    }
-    )
-    @GetMapping("/get/{address_id}")
-    public AddressDto getAddressById(@PathVariable(name = "address_id") Long address_id) {return addressSrv.getAddressById(address_id);}
+    @Operation(summary = "Find address by id", description = "Find Address By Id", tags = "Address", responses = {
+            @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = AddressDto.class))),
+            @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "404", description = "Not Found", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "500", description = "Bad GATEWAY", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+    })
+    @GetMapping("/{address_id}")
+    public ResponseEntity<AddressDto> getAddressById(@PathVariable(name = "address_id") Long address_id) {return ResponseEntity.ok().body(addressSrv.getAddressById(address_id));}
 
-    @Operation(summary = "add new address", description = "Add New Address", tags = "Address")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "successful operation", content = @Content(array = @ArraySchema(schema = @Schema(implementation = AddressDto.class)))),
-            @ApiResponse(responseCode = "400", description = "Bad request", content = @Content(schema = @Schema(description = "HTTP status error code", example = "400")))
-    }
-    )
+    @Operation(summary = "Add new Address", description = "Add new address", tags = "Address", responses = {
+            @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = AddressDto.class))),
+            @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "404", description = "Not Found", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "500", description = "Bad GATEWAY", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+    })
     @PostMapping("/save")
-    public void saveAddress(@RequestBody AddressDto addressDto){
+    public ResponseEntity<AddressDto> saveAddress(@RequestBody AddressDto addressDto) throws Exception {
         log.trace("{}", addressDto);
-        addressSrv.saveAddress(addressDto);
+        try{
+            return ResponseEntity.ok().body(addressSrv.saveAddress(addressDto));
+        }catch(RuntimeException ex){
+            throw new NttBadRequestException(ex.getLocalizedMessage());
+        }catch(Exception ex){
+            throw new Exception(ex.getLocalizedMessage());
+        }
     }
 
-    @Operation(summary = "update address", description = "Update Address", tags = "Address")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "successful operation", content = @Content(array = @ArraySchema(schema = @Schema(implementation = AddressDto.class)))),
-            @ApiResponse(responseCode = "400", description = "Bad request", content = @Content(schema = @Schema(description = "HTTP status error code", example = "400")))
-    }
-    )
+    @Operation(summary = "Update Address", description = "Update address", tags = "Address", responses = {
+            @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = AddressDto.class))),
+            @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "404", description = "Not Found", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "500", description = "Bad GATEWAY", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+    })
     @PostMapping("/edit/{address_id}")
-    public void updateAddress(@PathVariable(name = "address_id") Long address_id,@RequestBody AddressDto addressDto){
+    public ResponseEntity<AddressDto> updateAddress(@PathVariable(name = "address_id") Long address_id,@RequestBody AddressDto addressDto) throws Exception {
         log.trace("{}", addressDto);
-        addressSrv.updateAddress(address_id,addressDto);
+        try{
+            return ResponseEntity.ok().body(addressSrv.updateAddress(address_id,addressDto));
+        }catch(RuntimeException ex){
+            throw new NttBadRequestException(ex.getLocalizedMessage());
+        }catch(Exception ex){
+            throw new Exception(ex.getLocalizedMessage());
+        }
     }
 
-    @Operation(summary = "delete address", description = "delete Address", tags = "Address")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "successful operation", content = @Content(array = @ArraySchema(schema = @Schema(implementation = AddressDto.class)))),
-            @ApiResponse(responseCode = "400", description = "Bad request", content = @Content(schema = @Schema(description = "HTTP status error code", example = "400")))
-    }
-    )
+    @Operation(summary = "Delete Address", description = "Delete address", tags = "Address", responses = {
+            @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = AddressDto.class))),
+            @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "404", description = "Not Found", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "500", description = "Bad GATEWAY", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+    })
     @PostMapping("/delete/{address_id}")
-    public void removeAddress(@PathVariable(name = "address_id") Long address_id){
+    public void removeAddress(@PathVariable(name = "address_id") Long address_id) throws Exception {
         log.trace("{}", address_id);
-        addressSrv.deleteAddress(address_id);
+        try{
+            addressSrv.deleteAddress(address_id);
+        }catch(RuntimeException ex){
+            throw new NttBadRequestException(ex.getLocalizedMessage());
+        }catch(Exception ex){
+            throw new Exception(ex.getLocalizedMessage());
+        }
     }
 }

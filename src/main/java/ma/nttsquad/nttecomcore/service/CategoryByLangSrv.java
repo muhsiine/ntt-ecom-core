@@ -12,9 +12,9 @@ public interface CategoryByLangSrv {
 
     CategoryByLangDto getCategoryById(Long categoryByLang_id);
 
-    void saveCategoryByLang(CategoryByLangDto categoryByLangDto);
+    CategoryByLangDto saveCategoryByLang(CategoryByLangDto categoryByLangDto);
 
-    void updateCategoryByLang(Long categoryByLang_id, CategoryByLangDto categoryByLangDto);
+    CategoryByLangDto updateCategoryByLang(Long categoryByLang_id, CategoryByLangDto categoryByLangDto);
 
     void deleteCategoryByLang(Long categoryByLang_id);
 }

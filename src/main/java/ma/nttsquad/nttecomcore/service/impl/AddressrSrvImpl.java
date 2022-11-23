@@ -3,14 +3,12 @@ package ma.nttsquad.nttecomcore.service.impl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import ma.nttsquad.nttecomcore.dto.AddressDto;
-import ma.nttsquad.nttecomcore.dto.OrderDto;
+import ma.nttsquad.nttecomcore.dto.UserDto;
 import ma.nttsquad.nttecomcore.exception.NttNotFoundException;
 import ma.nttsquad.nttecomcore.mapper.AddressMapper;
-import ma.nttsquad.nttecomcore.mapper.OrderMapper;
+import ma.nttsquad.nttecomcore.mapper.UserMapper;
 import ma.nttsquad.nttecomcore.model.repository.AddressRepository;
-import ma.nttsquad.nttecomcore.model.repository.OrderRepository;
 import ma.nttsquad.nttecomcore.service.AddressSrv;
-import ma.nttsquad.nttecomcore.service.OrderSrv;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,16 +19,19 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Service
 public class AddressrSrvImpl implements AddressSrv {
-
     @Autowired
     AddressRepository addressRepository;
 
     @Override
     public List<AddressDto> getAllAddresses() {
-        return addressRepository.findAll()
+        List<AddressDto> allAddressDTO = addressRepository.findAll()
                 .stream()
                 .map(AddressMapper.INSTANCE::entityToDto)
-                .collect(Collectors.toList());
+                .toList();
+        if(allAddressDTO == null || allAddressDTO.isEmpty()){
+            throw new NttNotFoundException("There's no addresses in database");
+        }
+        return allAddressDTO;
     }
 
     @Override
@@ -42,26 +43,23 @@ public class AddressrSrvImpl implements AddressSrv {
     }
 
     @Override
-    public void saveAddress(AddressDto addressDto) {
-        log.trace("start save address: {}",addressDto);
-        addressRepository.save(AddressMapper.INSTANCE.dtoToEntity(addressDto));
-        log.trace("end save address");
+    public AddressDto saveAddress(AddressDto addressDto) {
+        log.trace("save address: {}",addressDto);
+        return AddressMapper.INSTANCE.entityToDto(addressRepository.save(AddressMapper.INSTANCE.dtoToEntity(addressDto)));
     }
 
     @Override
-    public void updateAddress(Long address_id, AddressDto addressDto) {
-        log.trace("start update address: {} {}",address_id, addressDto);
+    public AddressDto updateAddress(Long address_id, AddressDto addressDto) {
+        log.trace("update address: {} {}",address_id, addressDto);
         AddressDto address = getAddressById(address_id);
         addressDto.setId(address.getId());
-        addressRepository.save(AddressMapper.INSTANCE.dtoToEntity(addressDto));
-        log.trace("end update address: {}",address_id);
+        return AddressMapper.INSTANCE.entityToDto(addressRepository.save(AddressMapper.INSTANCE.dtoToEntity(addressDto)));
     }
 
     @Override
     public void deleteAddress(Long address_id) {
-        log.trace("start delete address: {}",address_id);
+        log.trace("delete address: {}",address_id);
         addressRepository.deleteById(address_id);
-        log.trace("end delete address: {}",address_id);
     }
 
 }

@@ -13,9 +13,9 @@ public interface OrderSrv {
 
     OrderDto getOrderById(Long order_id);
 
-    void saveOrder(OrderDto orderDto);
+    OrderDto saveOrder(OrderDto orderDto);
 
-    void updateOrder(Long order_id, OrderDto orderDto);
+    OrderDto updateOrder(Long order_id, OrderDto orderDto);
 
     void deleteOrder(Long order_id);
 }

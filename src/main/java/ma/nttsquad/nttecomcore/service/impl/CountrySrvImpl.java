@@ -3,8 +3,10 @@ package ma.nttsquad.nttecomcore.service.impl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import ma.nttsquad.nttecomcore.dto.CountryDto;
+import ma.nttsquad.nttecomcore.dto.OrderItemDto;
 import ma.nttsquad.nttecomcore.exception.NttNotFoundException;
 import ma.nttsquad.nttecomcore.mapper.CountryMapper;
+import ma.nttsquad.nttecomcore.mapper.OrderItemMapper;
 import ma.nttsquad.nttecomcore.model.repository.CountryRepository;
 import ma.nttsquad.nttecomcore.service.CountrySrv;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,10 +25,14 @@ public class CountrySrvImpl implements CountrySrv {
 
     @Override
     public List<CountryDto> getAllCountries() {
-        return countryRepository.findAll()
+        List<CountryDto> AllCoutryItemDTO = countryRepository.findAll()
                 .stream()
                 .map(CountryMapper.INSTANCE::entityToDto)
-                .collect(Collectors.toList());
+                .toList();
+        if(AllCoutryItemDTO == null || AllCoutryItemDTO.isEmpty()){
+            throw new NttNotFoundException("There's no countries in database");
+        }
+        return AllCoutryItemDTO;
     }
 
     @Override
@@ -38,25 +44,22 @@ public class CountrySrvImpl implements CountrySrv {
     }
 
     @Override
-    public void saveCountry(CountryDto countryDto) {
-        log.trace("start save country: {}",countryDto);
-        countryRepository.save(CountryMapper.INSTANCE.dtoToEntity(countryDto));
-        log.trace("end save country");
+    public CountryDto saveCountry(CountryDto countryDto) {
+        log.trace("save country: {}",countryDto);
+        return CountryMapper.INSTANCE.entityToDto(countryRepository.save(CountryMapper.INSTANCE.dtoToEntity(countryDto)));
     }
 
     @Override
-    public void updateCountry(Long country_id, CountryDto countryDto) {
-        log.trace("start update country: {} {}",country_id, countryDto);
+    public CountryDto updateCountry(Long country_id, CountryDto countryDto) {
+        log.trace("update country: {} {}",country_id, countryDto);
         CountryDto country = getCountryById(country_id);
         countryDto.setId(country.getId());
-        countryRepository.save(CountryMapper.INSTANCE.dtoToEntity(countryDto));
-        log.trace("end update country: {}",country_id);
+        return CountryMapper.INSTANCE.entityToDto(countryRepository.save(CountryMapper.INSTANCE.dtoToEntity(countryDto)));
     }
 
     @Override
     public void deleteCountry(Long country_id) {
-        log.trace("start delete country: {}",country_id);
+        log.trace("delete country: {}",country_id);
         countryRepository.deleteById(country_id);
-        log.trace("end delete country: {}",country_id);
     }
 }

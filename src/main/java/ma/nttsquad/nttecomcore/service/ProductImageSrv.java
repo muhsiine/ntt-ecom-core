@@ -13,9 +13,9 @@ public interface ProductImageSrv {
 
      ProductImageDto getProductImageById(Long productImg_id);
 
-     void saveProductImage(ProductImageDto productImageDto);
+     ProductImageDto saveProductImage(ProductImageDto productImageDto);
 
-     void updateProductImage(Long productImg_id, ProductImageDto productImageDto);
+     ProductImageDto updateProductImage(Long productImg_id, ProductImageDto productImageDto);
 
      void deleteProductImage(Long productImg_id);
 }
