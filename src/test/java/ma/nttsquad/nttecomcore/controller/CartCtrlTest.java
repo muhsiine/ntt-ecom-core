@@ -67,14 +67,16 @@ class CartCtrlTest {
         mockCartDtoList=new ArrayList<>();
 
         category = new Category(3L,"Children", "icon");
-        productMock = new Product(1L, null, "desc", 15.22, null, category, 1, null, null, null);
+        productMock = new Product(1L, null, "desc", 15.22, null, category, 1, null, null, null,null);
 
         mockCartItem = new CartItem(1L,null,productMock,5);
         mockCartItemDto = CartItemMapper.INSTANCE.entityToDto(mockCartItem);
 
         mockCartItemList.add(mockCartItem);
 
-        user = new User(1L,"yassir_123","Yassir","El Reklaoui","yassir9reklaoui@gmail.com","+212707244096","24/04/1996",null,null);
+
+        user = new User(1L,"yassir_123","Yassir","El Reklaoui","yassir9reklaoui@gmail.com","yaseer123","+212707244096","24/04/1996",null,null,null);
+
 
         mockCart = new Cart(1L,mockCartItemList,user);
         mockCartDto = CartMapper.INSTANCE.entityToDto(mockCart);
@@ -101,7 +103,7 @@ class CartCtrlTest {
         Long userId=1L;
         when(cartSrv.getCartByUserId(userId)).thenReturn(mockCartDto);
 
-        mockMvc.perform(get("/carts/user/{user_id}",userId)
+        mockMvc.perform(get("/carts/user/{userId}",userId)
                 .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -110,6 +112,22 @@ class CartCtrlTest {
                 .andExpect(jsonPath("$.user.username",Matchers.is("yassir_123")))
                 .andReturn();
     }
+
+    @Test
+    void getCartById() throws Exception {
+        Long userId=1L;
+        when(cartSrv.getCartById(userId)).thenReturn(mockCartDto);
+
+        mockMvc.perform(get("/carts/{id}",userId)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", Matchers.notNullValue()))
+                .andExpect(jsonPath("$.id").value(1L))
+                .andExpect(jsonPath("$.user.username",Matchers.is("yassir_123")))
+                .andReturn();
+    }
+
 
     @Test
     void getCartItemsByCartId() throws Exception {

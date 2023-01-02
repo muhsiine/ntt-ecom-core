@@ -8,94 +8,86 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import ma.nttsquad.nttecomcore.dto.CurrencyDTO;
+import ma.nttsquad.nttecomcore.dto.OrderDto;
 import ma.nttsquad.nttecomcore.dto.ProductDto;
-import ma.nttsquad.nttecomcore.dto.ProductFilterDto;
 import ma.nttsquad.nttecomcore.exception.records.ErrorResponse;
-import ma.nttsquad.nttecomcore.service.ProductSrv;
+import ma.nttsquad.nttecomcore.model.Category;
+import ma.nttsquad.nttecomcore.model.Currency;
+import ma.nttsquad.nttecomcore.service.CurrencySrv;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController
-@RequiredArgsConstructor
-@RequestMapping("/products")
 @Slf4j
-@Tag(name = "Product", description = "The Products API")
-public class ProductCtrl {
+@RequiredArgsConstructor
+@RestController
+@RequestMapping("/currency")
+@Tag(name = "Currency", description = "The Currency API")
+public class CurrencyCtrl {
 
-    final ProductSrv productSrv;
+    private final CurrencySrv currencySrv;
 
-    @Operation(summary = "Find all Products", description = "Find all Products", tags = "Product", responses = {
-            @ApiResponse(responseCode = "200", description = "OK", content = @Content(array = @ArraySchema(schema = @Schema(implementation = ProductDto.class)))),
+    @Operation(summary = "Find all Currencies", description = "Find all Currencies", tags = "Currencies", responses = {
+            @ApiResponse(responseCode = "200", description = "OK", content = @Content(array = @ArraySchema(schema = @Schema(implementation = CurrencyDTO.class)))),
             @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
             @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
             @ApiResponse(responseCode = "404", description = "Not Found", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
             @ApiResponse(responseCode = "500", description = "Bad GATEWAY", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
-    @GetMapping(value = {"/all"})
-    public ResponseEntity<List<ProductDto>> getAllProducts() {
-        return ResponseEntity.ok().body(productSrv.getAllProducts());
+    @GetMapping("/all")
+    public ResponseEntity<List<CurrencyDTO>> getAll(){
+        return new ResponseEntity<>(currencySrv.getAllCurrencies(), HttpStatus.OK);
     }
 
-    @Operation(summary = "Find Product by Id", description = "Find Product by Id", tags = "Product", responses = {
-            @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = ProductDto.class))),
+    @Operation(summary = "Find all Currency by User Id", description = "Find all Currency by User Id", tags = "Currency", responses = {
+            @ApiResponse(responseCode = "200", description = "OK", content = @Content(array = @ArraySchema(schema = @Schema(implementation = CurrencyDTO.class)))),
             @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
             @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
             @ApiResponse(responseCode = "404", description = "Not Found", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
             @ApiResponse(responseCode = "500", description = "Bad GATEWAY", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     @GetMapping("/{id}")
-    public ResponseEntity<ProductDto> getProductById(@PathVariable("id") Long productId) {
-        log.info("Id: {}", productId);
-        return ResponseEntity.ok().body(productSrv.getProductById(productId));
+    public ResponseEntity<CurrencyDTO> getCurrencuById(@PathVariable Long id){
+        return new ResponseEntity<>(currencySrv.getCurrencyById(id),HttpStatus.OK);
     }
 
-    @Operation(summary = "Find Product by Category Id", description = "Find Product by Category Id", tags = "Product", responses = {
-            @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = ProductDto.class))),
+    @Operation(summary = "Save Currency", description = "Save Currency", tags = "Currency", responses = {
+            @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = CurrencyDTO.class))),
             @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
             @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
             @ApiResponse(responseCode = "404", description = "Not Found", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
             @ApiResponse(responseCode = "500", description = "Bad GATEWAY", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
-    @GetMapping("/category/{id}")
-    public ResponseEntity<List<ProductDto>> getProductByCategoryId(@PathVariable("id") Long categoryId) {
-        return ResponseEntity.ok().body(productSrv.getProductByCategoryId(categoryId));
+    @PostMapping("/add")
+    public ResponseEntity<CurrencyDTO> saveCurrency(@RequestBody CurrencyDTO currencyDTO){
+        return new ResponseEntity<>(currencySrv.saveCurrency(currencyDTO),HttpStatus.OK);
     }
 
-    @Operation(summary = "Save Product", description = "Save Product", tags = "Product", responses = {
-            @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = ProductDto.class))),
+    @Operation(summary = "Update Currency", description = "Update Currency", tags = "Currency", responses = {
+            @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = CurrencyDTO.class))),
             @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
             @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
             @ApiResponse(responseCode = "404", description = "Not Found", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
             @ApiResponse(responseCode = "500", description = "Bad GATEWAY", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
-    @PostMapping("/save")
-    public ResponseEntity<ProductDto> saveProduct(@RequestBody ProductDto productDto) {
-        return ResponseEntity.ok().body(productSrv.saveProduct(productDto));
+    @PutMapping("/update")
+    public ResponseEntity<CurrencyDTO> updateCurrency(@RequestBody CurrencyDTO currencyDTO){
+        return new ResponseEntity<>(currencySrv.updateCurrency(currencyDTO),HttpStatus.OK);
     }
 
-    @Operation(summary = "filer Product", description = "filer Product", tags = "Product", responses = {
-            @ApiResponse(responseCode = "200", description = "OK", content = @Content(array = @ArraySchema(schema = @Schema(implementation = ProductDto.class)))),
+    @Operation(summary = "Delete Currency", description = "Delete Currency", tags = "Currency", responses = {
+            @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = CurrencyDTO.class))),
             @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
             @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
             @ApiResponse(responseCode = "404", description = "Not Found", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
             @ApiResponse(responseCode = "500", description = "Bad GATEWAY", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
-    @PostMapping("/filter")
-    public ResponseEntity<List<ProductDto>> filter(@RequestBody(required = false) ProductFilterDto productFilterDto) {
-        return ResponseEntity.ok(productSrv.filter(productFilterDto));
-    }
-
-    @Operation(summary = "get max Price", description = "get max Price", tags = "Product", responses = {
-            @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = Double.class))),
-            @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
-            @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
-            @ApiResponse(responseCode = "404", description = "Not Found", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
-            @ApiResponse(responseCode = "500", description = "Bad GATEWAY", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
-    })
-    @GetMapping("/maxPrice")
-    public ResponseEntity<Double> maxPrice() {
-        return ResponseEntity.ok(productSrv.maxPrice());
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<?> deleteCurrency(@PathVariable Long id){
+        currencySrv.deleteCurrency(id);
+        return new ResponseEntity<>("Currency has been deleted successfully",HttpStatus.OK);
     }
 }
