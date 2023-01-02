@@ -66,6 +66,7 @@ class CartSrvTest {
 
         user = new User(1L,"yassir_123","Yassir","El Reklaoui","yassir9reklaoui@gmail.com","yaser123","+212707244096","24/04/1996",null,null,null);
 
+
         mockCart = new Cart(1L,mockCartItemList,user);
         mockCartDto = CartMapper.INSTANCE.entityToDto(mockCart);
 

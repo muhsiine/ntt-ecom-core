@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import ma.nttsquad.nttecomcore.dto.CartDto;
 import ma.nttsquad.nttecomcore.dto.CartItemDto;
+import ma.nttsquad.nttecomcore.exception.NttBadRequestException;
 import ma.nttsquad.nttecomcore.exception.NttNotFoundException;
 import ma.nttsquad.nttecomcore.mapper.CartItemMapper;
 import ma.nttsquad.nttecomcore.mapper.CartMapper;
@@ -32,7 +33,7 @@ public class CartSrvImpl implements CartSrv {
                 .stream()
                 .map(CartMapper.INSTANCE::entityToDto)
                 .toList();
-        if(allCartDTO == null || allCartDTO.isEmpty()){
+        if(allCartDTO.isEmpty()){
             throw new NttNotFoundException("There's no cart in data base");
         }
         return allCartDTO;
@@ -68,7 +69,11 @@ public class CartSrvImpl implements CartSrv {
     @Override
     public CartDto saveCart(CartDto cartDto) {
         log.trace("{}", cartDto);
-        return CartMapper.INSTANCE.entityToDto(cartRepository.save(CartMapper.INSTANCE.dtoToEntity(cartDto)));
+        try{
+            return CartMapper.INSTANCE.entityToDto(cartRepository.save(CartMapper.INSTANCE.dtoToEntity(cartDto)));
+        }catch(IllegalArgumentException ex){
+            throw new NttBadRequestException(ex.getLocalizedMessage());
+        }
     }
 
     @Override
@@ -88,7 +93,7 @@ public class CartSrvImpl implements CartSrv {
     public CartDto removeItemsFromCart(Long cartId, List<Long> cartItemsId) {
         boolean hasCartItems = false;
         CartDto cartDto = getCartById(cartId);
-        CartDto newCartDto = null;
+        CartDto newCartDto ;
         if(!cartDto.getCartItems().isEmpty()) {
             for (Long cartItemId : cartItemsId) {
                 CartItemDto cartItemDto = cartDto.getCartItems().stream()
@@ -109,6 +114,7 @@ public class CartSrvImpl implements CartSrv {
             newCartDto=cartDto;
         else
             throw new NttNotFoundException("The cart doesn't contain any selected cart items");
+
         return newCartDto;
     }
 
