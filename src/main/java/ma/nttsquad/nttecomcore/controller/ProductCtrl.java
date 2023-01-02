@@ -16,7 +16,7 @@ import ma.nttsquad.nttecomcore.model.Product;
 import ma.nttsquad.nttecomcore.service.ProductSrv;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
+import org.springframework.beans.factory.annotation.Autowired;
 import java.util.List;
 
 @RestController
