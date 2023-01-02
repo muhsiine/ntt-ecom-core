@@ -101,7 +101,7 @@ class CartCtrlTest {
         Long userId=1L;
         when(cartSrv.getCartByUserId(userId)).thenReturn(mockCartDto);
 
-        mockMvc.perform(get("/carts/user/{user_id}",userId)
+        mockMvc.perform(get("/carts/user/{userId}",userId)
                 .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -110,6 +110,22 @@ class CartCtrlTest {
                 .andExpect(jsonPath("$.user.username",Matchers.is("yassir_123")))
                 .andReturn();
     }
+
+    @Test
+    void getCartById() throws Exception {
+        Long userId=1L;
+        when(cartSrv.getCartById(userId)).thenReturn(mockCartDto);
+
+        mockMvc.perform(get("/carts/{id}",userId)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", Matchers.notNullValue()))
+                .andExpect(jsonPath("$.id").value(1L))
+                .andExpect(jsonPath("$.user.username",Matchers.is("yassir_123")))
+                .andReturn();
+    }
+
 
     @Test
     void getCartItemsByCartId() throws Exception {
