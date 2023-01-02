@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "UserS",uniqueConstraints = {@UniqueConstraint(columnNames = { "username", "email"})})
+@Table(name = "Users",uniqueConstraints = {@UniqueConstraint(columnNames = { "username", "email"})})
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
