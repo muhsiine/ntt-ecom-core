@@ -1,23 +1,24 @@
 package ma.nttsquad.nttecomcore.model;
 
 import lombok.*;
+import javax.persistence.*;
 import ma.nttsquad.nttecomcore.cons.LangCons;
 
-import javax.persistence.*;
-
+@Entity
+@Table(name = "Categories_Languages")
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
 @ToString
-@Entity
-@Table(name = "CATEGORY_X_LANG")
 public class CategoryByLang {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "language_id")
     private Long id;
 
+    @Column(length = 50)
     private String description;
 
     @Enumerated(EnumType.STRING)

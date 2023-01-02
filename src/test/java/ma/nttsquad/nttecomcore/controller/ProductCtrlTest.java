@@ -50,7 +50,7 @@ class ProductCtrlTest {
         MockitoAnnotations.openMocks(this);
 
         category = new Category(3L,"Children", "icon");
-        productMock = new Product(1L, null, "desc", 15.22, null, category, 1, null, null, null);
+        productMock = new Product(1L, null, "desc", 15.22, null, category, 1, null, null, null,null);
         productDtoMock = ProductMapper.INSTANCE.entityToDto(productMock);
 
         mockProducListDto = new ArrayList<>();

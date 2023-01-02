@@ -7,6 +7,7 @@ import lombok.*;
 import javax.persistence.*;
 
 @Entity
+@Table(name = "Products_Images")
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -15,7 +16,10 @@ import javax.persistence.*;
 public class ProductImage {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "image_id")
     private Long id;
+
+    @Column(name = "image_url",length = 255)
     private String imageUrl;
 
     @ManyToOne
