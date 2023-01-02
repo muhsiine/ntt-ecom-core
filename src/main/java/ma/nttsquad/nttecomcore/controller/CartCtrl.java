@@ -50,6 +50,7 @@ public class CartCtrl {
     })
     @GetMapping("/user/{userId}")
     public ResponseEntity<CartDto> getCartByUserId(@PathVariable(name = "userId") Long userId) {
+        log.trace("{}", userId);
         return ResponseEntity.ok().body(cartSrv.getCartByUserId(userId));
     }
 
@@ -62,6 +63,7 @@ public class CartCtrl {
     })
     @GetMapping("/{id}")
     public ResponseEntity<CartDto> getCartById(@PathVariable(name = "id") Long id) {
+        log.trace("{}", id);
         return ResponseEntity.ok().body(cartSrv.getCartById(id));
     }
 
@@ -86,16 +88,9 @@ public class CartCtrl {
             @ApiResponse(responseCode = "500", description = "Bad GATEWAY", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     @PostMapping("/save")
-    public ResponseEntity<CartDto> saveCart(@RequestBody CartDto cartDto) throws Exception {
+    public ResponseEntity<CartDto> saveCart(@RequestBody CartDto cartDto){
         log.trace("{}", cartDto);
-        try{
-            return ResponseEntity.ok().body(cartSrv.saveCart(cartDto));
-        }catch(RuntimeException ex){
-            throw new NttBadRequestException(ex.getLocalizedMessage());
-        }catch(Exception ex){
-            throw new Exception(ex.getLocalizedMessage());
-        }
-
+        return ResponseEntity.ok().body(cartSrv.saveCart(cartDto));
     }
 
     @Operation(summary = "add items to Cart", description = "add items to Cart", tags = "Cart", responses = {
@@ -121,7 +116,6 @@ public class CartCtrl {
     @PostMapping("/{cartId}/remove/cartItems")
     public ResponseEntity<CartDto> removeItemsFromCart(@PathVariable(name = "cartId") Long cartId, @RequestBody List<Long> cartItemsId){
         log.trace("{}", cartId);
-
         return ResponseEntity.ok().body(cartSrv.removeItemsFromCart(cartId, cartItemsId));
     }
 
