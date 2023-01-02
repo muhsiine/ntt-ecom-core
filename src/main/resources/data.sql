@@ -1,4 +1,4 @@
-INSERT INTO USER(ID, USERNAME, FIRST_NAME, LAST_NAME, EMAIL, PHONE_NUMBER, CREATED_AT, IMAGE_URL)
+INSERT INTO USERS(ID, USERNAME, FIRST_NAME, LAST_NAME, EMAIL, PHONE_NUMBER, CREATED_AT, IMAGE_URL)
     VALUES (1, 'user1', 'user1_F', 'user1_L', 'user1@mail.com', '0612345678', SYSDATE, 'https://www.nicepng.com/png/full/128-1280406_view-user-icon-png-user-circle-icon-png.png');
 INSERT INTO USER(ID, USERNAME, FIRST_NAME, LAST_NAME, EMAIL, PHONE_NUMBER, CREATED_AT, IMAGE_URL)
     VALUES (2, 'user2', 'user2_F', 'user2_L', 'user2@mail.com', '0687654321', SYSDATE, 'https://www.nicepng.com/png/full/128-1280406_view-user-icon-png-user-circle-icon-png.png');
