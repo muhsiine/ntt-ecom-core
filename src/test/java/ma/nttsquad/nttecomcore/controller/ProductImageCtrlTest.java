@@ -56,8 +56,8 @@ class ProductImageCtrlTest {
         Long productId=1L;
         when(productImageSrv.getImageByProduct(productId)).thenReturn(productImageDtoListMock);
 
-        mockMvc.perform(get("/images/{id}",productId)
-                        .accept(MediaType.APPLICATION_JSON))
+        mockMvc.perform(get("/images/product/{id}",productId)
+                .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", Matchers.hasSize(1)))

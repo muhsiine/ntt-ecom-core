@@ -15,7 +15,6 @@ import ma.nttsquad.nttecomcore.service.CartSrv;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -50,7 +49,6 @@ public class CartSrvImpl implements CartSrv {
     @Override
     public CartDto getCartById(Long id) {
         log.trace("{}", id);
-
         return cartRepository.findById(id)
                 .map(CartMapper.INSTANCE::entityToDto)
                 .orElseThrow(() -> new NttNotFoundException("There's no cart with the id '%d'".formatted(id)));
@@ -90,6 +88,14 @@ public class CartSrvImpl implements CartSrv {
     }
 
     @Override
+    public CartDto updateCart(Long cart_id, CartDto cartDto) {
+        log.trace("update cart: {} {}",cart_id, cartDto);
+        CartDto cart = getCartById(cart_id);
+        cartDto.setId(cart.getId());
+        return CartMapper.INSTANCE.entityToDto(cartRepository.save(CartMapper.INSTANCE.dtoToEntity(cartDto)));
+    }
+
+    @Override
     public CartDto removeItemsFromCart(Long cartId, List<Long> cartItemsId) {
         boolean hasCartItems = false;
         CartDto cartDto = getCartById(cartId);
@@ -125,5 +131,11 @@ public class CartSrvImpl implements CartSrv {
         return cartItemRepository.findById(id)
                 .map(CartItemMapper.INSTANCE::entityToDto)
                 .orElseThrow(() -> new NttNotFoundException("There's no cart Item with the id '%d'".formatted(id)));
+    }
+
+    @Override
+    public void deleteCart(Long cart_id) {
+        log.trace("delete cart: {}",cart_id);
+        cartItemRepository.deleteById(cart_id);
     }
 }

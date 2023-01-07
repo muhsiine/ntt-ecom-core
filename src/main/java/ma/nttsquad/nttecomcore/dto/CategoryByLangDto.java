@@ -11,7 +11,6 @@ import ma.nttsquad.nttecomcore.cons.LangCons;
 @ToString
 public class CategoryByLangDto {
 
-    //@JsonIgnore
     private Long id;
     private LangCons langCode;
     private String description;

@@ -5,6 +5,7 @@ import ma.nttsquad.nttecomcore.dto.CategoryByLangDto;
 import ma.nttsquad.nttecomcore.model.Category;
 import ma.nttsquad.nttecomcore.model.CategoryByLang;
 import ma.nttsquad.nttecomcore.model.repository.CategoryByLangRepository;
+import ma.nttsquad.nttecomcore.model.repository.CategoryRepository;
 import ma.nttsquad.nttecomcore.service.impl.CategoriesSrvImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -22,12 +23,14 @@ class CategoriesSrvTest {
 
     @Mock
     CategoryByLangRepository categoryByLangRepository;
+    @Mock
+    CategoryRepository categoryRepository;
 
     CategoriesSrv categoriesSrv;
 
     @Test
     void getAllCategoriesByLang() {
-        categoriesSrv = new CategoriesSrvImpl(categoryByLangRepository);
+        categoriesSrv = new CategoriesSrvImpl(categoryByLangRepository,categoryRepository);
 
         Category mockCategory = new Category(1L,"sp",null);
         CategoryByLang mockCategoryByLang = new CategoryByLang(1L,"Sport",LangCons.EN,mockCategory);

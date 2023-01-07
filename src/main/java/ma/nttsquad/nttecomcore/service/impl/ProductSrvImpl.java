@@ -1,19 +1,23 @@
 package ma.nttsquad.nttecomcore.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import ma.nttsquad.nttecomcore.dto.ProductDto;
 import ma.nttsquad.nttecomcore.dto.ProductFilterDto;
 import ma.nttsquad.nttecomcore.exception.NttNotFoundException;
 import ma.nttsquad.nttecomcore.mapper.ProductMapper;
 import ma.nttsquad.nttecomcore.model.repository.ProductRepository;
 import ma.nttsquad.nttecomcore.service.ProductSrv;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service
+@Slf4j
 @RequiredArgsConstructor
+@Service
 public class ProductSrvImpl implements ProductSrv {
+
 
     final ProductRepository productRepository;
 
@@ -31,9 +35,11 @@ public class ProductSrvImpl implements ProductSrv {
     }
 
     @Override
-    public ProductDto getProductById(Long productId) {
-        return ProductMapper.INSTANCE.entityToDto(productRepository.findById(productId)
-                .orElseThrow(() -> new NttNotFoundException("product with id '%d' is not found".formatted(productId))));
+    public ProductDto getProductById(Long product_id) {
+        log.trace("{}", product_id);
+        return productRepository.findById(product_id)
+                .map(ProductMapper.INSTANCE::entityToDto)
+                .orElseThrow(() -> new NttNotFoundException("There's no product with the id '%d'".formatted(product_id)));
     }
 
     @Override
@@ -49,6 +55,7 @@ public class ProductSrvImpl implements ProductSrv {
         return allProducts;
     }
 
+
     @Override
     public ProductDto saveProduct(ProductDto productDto) {
         try {
@@ -58,6 +65,19 @@ public class ProductSrvImpl implements ProductSrv {
         }
     }
 
+    @Override
+    public ProductDto updateProduct(Long product_id, ProductDto productDto) {
+        log.trace("update product: {} , {}",product_id, productDto);
+        ProductDto product = getProductById(product_id);
+        productDto.setId(product.getId());
+        return ProductMapper.INSTANCE.entityToDto(productRepository.save(ProductMapper.INSTANCE.dtoToEntity(productDto)));
+    }
+
+    @Override
+    public void deleteProduct(Long product_id) {
+        log.trace("delete product: {}",product_id);
+        productRepository.deleteById(product_id);
+    }
     @Override
     public List<ProductDto> filter(ProductFilterDto productFilterDto) {
         List<ProductDto> filtredProducts = productRepository
