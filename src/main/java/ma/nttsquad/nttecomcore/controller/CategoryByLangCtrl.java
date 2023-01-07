@@ -25,8 +25,7 @@ import java.util.List;
 @Tag(name = "CategoryByLang", description = "The Categories By Lang API")
 public class CategoryByLangCtrl {
 
-    @Autowired
-    final CategoryByLangSrv categoryByLangSrv;
+    final  CategoryByLangSrv categoryByLangSrv;
 
     @Operation(summary = "Find all categories by lang", description = "Find all Categories By Lang", tags = "CategoryByLang", responses = {
             @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = CategoryByLangDto.class))),

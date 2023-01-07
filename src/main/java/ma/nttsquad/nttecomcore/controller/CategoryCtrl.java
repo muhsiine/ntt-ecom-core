@@ -29,8 +29,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CategoryCtrl {
 
-    @Autowired
-    private final CategoriesSrv categorySrv;
+    final CategoriesSrv categorySrv;
 
     @Operation(summary = "Find all Categories", description = "Find all Categories", tags = "Categories", responses = {
             @ApiResponse(responseCode = "200", description = "OK", content = @Content(array = @ArraySchema(schema = @Schema(implementation = Category.class)))),

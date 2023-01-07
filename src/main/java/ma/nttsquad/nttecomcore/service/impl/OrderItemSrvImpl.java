@@ -17,8 +17,7 @@ import java.util.List;
 @Service
 public class OrderItemSrvImpl implements OrderItemSrv {
 
-    @Autowired
-    OrderItemRepository orderItemRepository;
+    final OrderItemRepository orderItemRepository;
 
     @Override
     public List<OrderItemDto> getAllOrdersItems() {

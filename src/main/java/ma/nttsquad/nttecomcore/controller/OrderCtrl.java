@@ -29,8 +29,7 @@ import java.util.List;
 @Tag(name = "Order", description = "The Order API")
 public class OrderCtrl {
 
-    @Autowired
-    OrderSrv orderSrv;
+    final OrderSrv orderSrv;
 
 
     @Operation(summary = "Find all Orders", description = "Find all Orders", tags = "Order", responses = {
@@ -64,7 +63,7 @@ public class OrderCtrl {
             @ApiResponse(responseCode = "404", description = "Not Found", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
             @ApiResponse(responseCode = "500", description = "Bad GATEWAY", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
-    @GetMapping("/{order_id}")
+    @GetMapping("/order/{order_id}")
     public ResponseEntity<OrderDto> getOrderById(@PathVariable(name = "order_id") Long order_id) { return ResponseEntity.ok().body(orderSrv.getOrderById(order_id));}
 
     @Operation(summary = "Add new Order", description = "Add new order", tags = "Order", responses = {

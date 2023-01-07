@@ -25,8 +25,7 @@ import java.util.List;
 @Tag(name = "Status", description = "The Status API")
 public class StatusCtrl {
 
-    @Autowired
-    final StatusSrv statusSrv;
+    private final  StatusSrv statusSrv;
 
     @Operation(summary = "Find all Status", description = "Find all status", tags = "Status", responses = {
             @ApiResponse(responseCode = "200", description = "OK", content = @Content(array = @ArraySchema(schema = @Schema(implementation = StatusDto.class)))),

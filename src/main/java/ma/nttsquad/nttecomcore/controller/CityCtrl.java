@@ -23,8 +23,8 @@ import java.util.List;
 @RequestMapping("/cities")
 @Tag(name = "City", description = "The City API")
 public class CityCtrl {
-    @Autowired
-    final CitySrv citySrv;
+
+    final  CitySrv citySrv;
 
     @Operation(summary = "Find all cities", description = "Find All Cities", tags = "City", responses = {
             @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = CityDto.class))),

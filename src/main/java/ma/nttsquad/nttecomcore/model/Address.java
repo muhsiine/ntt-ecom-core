@@ -21,7 +21,7 @@ public class Address {
     @Column(name = "address",length = 150)
     private String addressDesc;
 
-    @Column(name = "zip_cod",length = 10)
+    @Column(name = "zip_code",length = 10)
     private String zipCode;
 
     @ManyToOne

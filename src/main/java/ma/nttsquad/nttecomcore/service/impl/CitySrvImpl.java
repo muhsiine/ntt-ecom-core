@@ -20,8 +20,7 @@ import java.util.stream.Collectors;
 @Service
 public class CitySrvImpl implements CitySrv {
 
-    @Autowired
-    CityRepository cityRepository;
+    final CityRepository cityRepository;
 
 
     @Override

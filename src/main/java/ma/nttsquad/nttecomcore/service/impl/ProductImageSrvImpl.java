@@ -22,8 +22,8 @@ import java.util.stream.Collectors;
 @Service
 public class ProductImageSrvImpl implements ProductImageSrv {
 
-    @Autowired
-    private ProductImageRepository productImageRepository;
+
+    final ProductImageRepository productImageRepository;
 
 
     @Override

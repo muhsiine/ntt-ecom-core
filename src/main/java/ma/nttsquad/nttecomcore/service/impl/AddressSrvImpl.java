@@ -18,9 +18,9 @@ import java.util.stream.Collectors;
 @Slf4j
 @RequiredArgsConstructor
 @Service
-public class AddressrSrvImpl implements AddressSrv {
-    @Autowired
-    AddressRepository addressRepository;
+public class AddressSrvImpl implements AddressSrv {
+
+    final  AddressRepository addressRepository;
 
     @Override
     public List<AddressDto> getAllAddresses() {

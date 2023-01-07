@@ -24,8 +24,7 @@ import java.util.List;
 @Tag(name = "OrderItem", description = "The Order Item API")
 public class OrderItemCtrl {
 
-    @Autowired
-    final OrderItemSrv orderItemSrv;
+    final  OrderItemSrv orderItemSrv;
 
     @Operation(summary = "Find all Order Items", description = "Find all order items", tags = "OrderItem", responses = {
             @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = OrderItemDto.class))),

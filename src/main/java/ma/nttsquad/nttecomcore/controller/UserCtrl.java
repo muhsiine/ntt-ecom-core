@@ -25,7 +25,6 @@ import java.util.List;
 @Tag(name = "User", description = "The User API")
 public class UserCtrl {
 
-    @Autowired
     final UserSrv userSrv;
 
     @Operation(summary = "Find all users", description = "Find all users", tags = "User", responses = {

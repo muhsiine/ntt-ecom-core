@@ -17,8 +17,7 @@ import java.util.List;
 @Service
 public class StatusSrvImpl implements StatusSrv {
 
-    @Autowired
-    StatusRepository statusRepository;
+    final StatusRepository statusRepository;
 
 
     @Override

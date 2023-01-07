@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import ma.nttsquad.nttecomcore.dto.ProductImageDto;
 import ma.nttsquad.nttecomcore.exception.NttBadRequestException;
@@ -23,11 +24,11 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequestMapping("/images")
+@RequiredArgsConstructor
 @Tag(name = "Image", description = "The Product Image API")
 public class ProductImageCtrl {
 
-    @Autowired
-    private ProductImageSrv productImageSrv;
+    final  ProductImageSrv productImageSrv;
 
     @Operation(summary = "Find Images by ProductId", description = "Find Images by ProductId", tags = "Image", responses = {
             @ApiResponse(responseCode = "200", description = "OK", content = @Content(array = @ArraySchema(schema = @Schema(implementation = ProductImageDto.class)))),

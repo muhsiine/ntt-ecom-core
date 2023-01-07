@@ -26,8 +26,7 @@ import java.util.List;
 @Tag(name = "Cart", description = "The Cart API")
 public class CartCtrl {
 
-    @Autowired
-    final CartSrv cartSrv;
+    final  CartSrv cartSrv;
 
     @Operation(summary = "Find all carts", description = "Find all carts", tags = "Cart", responses = {
             @ApiResponse(responseCode = "200", description = "OK", content = @Content(array = @ArraySchema(schema = @Schema(implementation = CartDto.class)))),

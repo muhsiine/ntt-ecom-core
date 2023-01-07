@@ -19,8 +19,7 @@ import java.util.stream.Collectors;
 @Service
 public class OrderSrvImpl implements OrderSrv {
 
-    @Autowired
-    OrderRepository orderRepository;
+    final OrderRepository orderRepository;
 
     @Override
     public List<OrderDto> getAllOrders() {

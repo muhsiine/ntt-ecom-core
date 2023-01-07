@@ -24,8 +24,7 @@ import java.util.List;
 @Tag(name = "Country", description = "The Country API")
 public class CountryCtrl {
 
-    @Autowired
-    final CountrySrv countrySrv;
+    final  CountrySrv countrySrv;
 
     @Operation(summary = "Find all countries", description = "Find All Countries", tags = "Country", responses = {
             @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = CountryDto.class))),

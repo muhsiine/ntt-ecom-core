@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 @Service
 public class CategoryByLangSrvImpl implements CategoryByLangSrv {
 
-    CategoryByLangRepository categoryByLangRepository;
+    final CategoryByLangRepository categoryByLangRepository;
 
     @Override
     public List<CategoryByLangDto> getAllCategoriesByLang() {

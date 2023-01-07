@@ -38,7 +38,7 @@ class OrderCtrlTest {
     MockMvc mockMvc;
 
     private List<OrderDto> mockOrderDtoList;
-    private  List<Order> mockOrderList;
+    private List<Order> mockOrderList;
     private Order mockOrder;
     private OrderItem orderItem;
     private List<OrderItem> orderItemList;
@@ -49,28 +49,29 @@ class OrderCtrlTest {
     private Category category;
 
     @BeforeEach
-    void setUp(){
+    void setUp() {
         MockitoAnnotations.openMocks(this);
 
-        mockOrderList= new ArrayList<>();
-        orderItemList= new ArrayList<>();
-        mockOrderDtoList= new ArrayList<>();
+        mockOrderList = new ArrayList<>();
+        orderItemList = new ArrayList<>();
+        mockOrderDtoList = new ArrayList<>();
 
-        mockStatus = new Status(1L,"PENDING");
-        user = new User(1L,"yassir_123","Yassir","El Reklaoui","yassir9reklaoui@gmail.com","yasser123","+212707244096","24/04/1996",null,null,null);
-        category = new Category(3L,"Children", "icon");
-        productMock = new Product(1L, null, "desc", 15.22, null, category, 1, LocalDateTime.now(), null, null,null);
+        mockStatus = new Status(1L, "PENDING");
+        user = new User(1L, "yassir_123", "Yassir", "El Reklaoui", "yassir9reklaoui@gmail.com", "yasser123", "+212707244096", "24/04/1996", null, null, null);
+        category = new Category(3L, "Children", "icon");
+        productMock = new Product(1L, null, "desc", 15.22, null, category, 1, LocalDateTime.now(), null, null, null);
 
-        orderItem = new OrderItem(1L,null,productMock,32);
+        orderItem = new OrderItem(1L, null, productMock, 32);
         orderItemList.add(orderItem);
 
-        mockOrder =  new Order(1L,null,mockStatus,orderItemList, LocalDateTime.now(),LocalDateTime.now(),109.99,user,null);
+        mockOrder = new Order(1L, null, mockStatus, orderItemList, LocalDateTime.now(), LocalDateTime.now(), 109.99, user, null);
         mockOrderDto = OrderMapper.INSTANCE.entityToDto(mockOrder);
 
 
         mockOrderList.add(mockOrder);
         mockOrderDtoList.add(mockOrderDto);
     }
+
     @Test
     void getAllOrders() throws Exception {
 
@@ -82,23 +83,23 @@ class OrderCtrlTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", Matchers.hasSize(1)))
                 .andExpect(jsonPath("$[0].status.statusDesc", Matchers.is("PENDING")))
-                .andExpect(jsonPath("$[0].user.firstName",Matchers.is("Yassir")))
+                .andExpect(jsonPath("$[0].user.firstName", Matchers.is("Yassir")))
                 .andReturn();
 
     }
 
     @Test
     void getOrdersByUserId() throws Exception {
-        Long userId=1L;
+        Long userId = 1L;
         when(orderSrv.getOrdersByUserId(userId)).thenReturn(mockOrderDtoList);
 
-        mockMvc.perform(get("/orders/{id}",userId)
+        mockMvc.perform(get("/orders/{userId}", userId)
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", Matchers.notNullValue()))
                 .andExpect(jsonPath("$[0].id").value(1L))
-                .andExpect(jsonPath("$[0].user.username",Matchers.is("yassir_123")))
+                .andExpect(jsonPath("$[0].user.username", Matchers.is("yassir_123")))
                 .andReturn();
     }
 }

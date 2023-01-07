@@ -25,8 +25,7 @@ import java.util.List;
 @Tag(name = "Address", description = "The Address API")
 public class AddressCtrl {
 
-    @Autowired
-    final AddressSrv addressSrv;
+    final  AddressSrv addressSrv;
 
     @Operation(summary = "Find all addresses", description = "Find all addresses", tags = "Address", responses = {
             @ApiResponse(responseCode = "200", description = "OK", content = @Content(array = @ArraySchema(schema = @Schema(implementation = AddressDto.class)))),

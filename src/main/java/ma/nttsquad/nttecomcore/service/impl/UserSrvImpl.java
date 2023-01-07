@@ -23,9 +23,7 @@ import java.util.stream.Collectors;
 @Service
 public class UserSrvImpl implements UserSrv {
 
-    @Autowired
-    UserRepository userRepository;
-
+    final UserRepository userRepository;
 
     @Override
     public List<UserDto> getAllUsers() {

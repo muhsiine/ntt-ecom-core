@@ -18,8 +18,8 @@ import java.util.List;
 @Service
 public class ProductSrvImpl implements ProductSrv {
 
-    @Autowired
-    private ProductRepository productRepository;
+
+    final ProductRepository productRepository;
 
     @Override
     public List<ProductDto> getAllProducts() {

@@ -20,8 +20,7 @@ import java.util.stream.Collectors;
 @Service
 public class CountrySrvImpl implements CountrySrv {
 
-    @Autowired
-    CountryRepository countryRepository;
+    final CountryRepository countryRepository;
 
     @Override
     public List<CountryDto> getAllCountries() {
