@@ -98,11 +98,12 @@ public class CategoryCtrl {
             @ApiResponse(responseCode = "404", description = "Not Found", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
             @ApiResponse(responseCode = "500", description = "Bad GATEWAY", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
-    @PostMapping("/delete/{category_id}")
-    public void removeCategory(@PathVariable(name = "category_id") Long category_id) throws Exception {
+    @DeleteMapping("/delete/{category_id}")
+    public ResponseEntity<Void> deleteCategory(@PathVariable(name = "category_id") Long category_id) throws Exception {
         log.trace("{}", category_id);
         try{
             categorySrv.deleteCategory(category_id);
+            return ResponseEntity.noContent().build();
         }catch(RuntimeException ex){
             throw new NttBadRequestException(ex.getLocalizedMessage());
         }catch(Exception ex){

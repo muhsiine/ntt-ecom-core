@@ -11,6 +11,7 @@ import ma.nttsquad.nttecomcore.dto.OrderItemDto;
 import ma.nttsquad.nttecomcore.exception.NttBadRequestException;
 import ma.nttsquad.nttecomcore.exception.records.ErrorResponse;
 import ma.nttsquad.nttecomcore.service.OrderItemSrv;
+import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -92,11 +93,12 @@ public class OrderItemCtrl {
             @ApiResponse(responseCode = "404", description = "Not Found", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
             @ApiResponse(responseCode = "500", description = "Bad GATEWAY", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
-    @PostMapping("/delete/{orderItem_id}")
-    public void removeOrderItem(@PathVariable(name = "orderItem_id") Long orderItem_id) throws Exception {
+    @DeleteMapping("/delete/{orderItem_id}")
+    public ResponseEntity<Void> deleteOrderItem(@PathVariable(name = "orderItem_id") Long orderItem_id) throws Exception {
         log.trace("{}", orderItem_id);
         try {
             orderItemSrv.deleteOrderItem(orderItem_id);
+            return ResponseEntity.noContent().build();
         } catch (RuntimeException ex) {
             throw new NttBadRequestException(ex.getLocalizedMessage());
         } catch (Exception ex) {

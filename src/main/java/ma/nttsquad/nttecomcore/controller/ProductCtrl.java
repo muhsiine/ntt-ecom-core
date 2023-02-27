@@ -117,11 +117,12 @@ public class ProductCtrl {
             @ApiResponse(responseCode = "404", description = "Not Found", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
             @ApiResponse(responseCode = "500", description = "Bad GATEWAY", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
-    @PostMapping("/delete/{product_id}")
-    public void deleteProduct(@PathVariable("product_id") Long product_id) throws Exception {
+    @DeleteMapping("/delete/{product_id}")
+    public ResponseEntity<Void> deleteProduct(@PathVariable("product_id") Long product_id) throws Exception {
         log.trace("{}", product_id);
         try{
             productSrv.deleteProduct(product_id);
+            return ResponseEntity.noContent().build();
         }catch(RuntimeException ex){
             throw new NttBadRequestException(ex.getLocalizedMessage());
         }catch(Exception ex){

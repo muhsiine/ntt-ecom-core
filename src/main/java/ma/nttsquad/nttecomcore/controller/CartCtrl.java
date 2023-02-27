@@ -13,7 +13,6 @@ import ma.nttsquad.nttecomcore.dto.CartItemDto;
 import ma.nttsquad.nttecomcore.exception.NttBadRequestException;
 import ma.nttsquad.nttecomcore.exception.records.ErrorResponse;
 import ma.nttsquad.nttecomcore.service.CartSrv;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -144,11 +143,12 @@ public class CartCtrl {
             @ApiResponse(responseCode = "404", description = "Not Found", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
             @ApiResponse(responseCode = "500", description = "Bad GATEWAY", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
-    @PostMapping("/delete/{cart_id}")
-    public void removeCart(@PathVariable(name = "cart_id") Long cart_id) throws Exception {
+    @DeleteMapping("/delete/{cart_id}")
+    public ResponseEntity<Void> deleteCart(@PathVariable(name = "cart_id") Long cart_id) throws Exception {
         log.trace("{}", cart_id);
         try{
             cartSrv.deleteCart(cart_id);
+            return ResponseEntity.noContent().build();
         }catch(RuntimeException ex){
             throw new NttBadRequestException(ex.getLocalizedMessage());
         }catch(Exception ex){

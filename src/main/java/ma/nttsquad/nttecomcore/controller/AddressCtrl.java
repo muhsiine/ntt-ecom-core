@@ -10,9 +10,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import ma.nttsquad.nttecomcore.dto.AddressDto;
 import ma.nttsquad.nttecomcore.exception.NttBadRequestException;
+import ma.nttsquad.nttecomcore.exception.NttNotFoundException;
 import ma.nttsquad.nttecomcore.exception.records.ErrorResponse;
 import ma.nttsquad.nttecomcore.service.AddressSrv;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -94,11 +94,13 @@ public class AddressCtrl {
             @ApiResponse(responseCode = "404", description = "Not Found", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
             @ApiResponse(responseCode = "500", description = "Bad GATEWAY", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
-    @PostMapping("/delete/{address_id}")
-    public void removeAddress(@PathVariable(name = "address_id") Long address_id) throws Exception {
+    @DeleteMapping("/delete/{address_id}")
+    public ResponseEntity<Void> deleteAddress(@PathVariable(name = "address_id") Long address_id) throws Exception {
         log.trace("{}", address_id);
         try{
             addressSrv.deleteAddress(address_id);
+            System.out.println("Test");
+            return ResponseEntity.noContent().build();
         }catch(RuntimeException ex){
             throw new NttBadRequestException(ex.getLocalizedMessage());
         }catch(Exception ex){

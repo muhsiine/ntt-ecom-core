@@ -111,11 +111,12 @@ public class OrderCtrl {
             @ApiResponse(responseCode = "404", description = "Not Found", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
             @ApiResponse(responseCode = "500", description = "Bad GATEWAY", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
-    @PostMapping("/delete/{order_id}")
-    public void removeOrder(@PathVariable(name = "order_id") Long order_id) throws Exception {
+    @DeleteMapping("/delete/{order_id}")
+    public ResponseEntity<Void> deleteOrder(@PathVariable(name = "order_id") Long order_id) throws Exception {
         log.trace("{}", order_id);
         try{
             orderSrv.deleteOrder(order_id);
+            return ResponseEntity.noContent().build();
         }catch(RuntimeException ex){
             throw new NttBadRequestException(ex.getLocalizedMessage());
         }catch(Exception ex){

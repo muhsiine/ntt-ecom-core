@@ -94,11 +94,12 @@ public class StatusCtrl {
             @ApiResponse(responseCode = "404", description = "Not Found", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
             @ApiResponse(responseCode = "500", description = "Bad GATEWAY", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
-    @PostMapping("/delete/{status_id}")
-    public void removeStatus(@PathVariable(name = "status_id") Long status_id) throws Exception {
+    @DeleteMapping("/delete/{status_id}")
+    public ResponseEntity<Void> deleteStatus(@PathVariable(name = "status_id") Long status_id) throws Exception {
         log.trace("{}", status_id);
         try{
             statusSrv.deleteStatus(status_id);
+            return ResponseEntity.noContent().build();
         }catch(RuntimeException ex){
             throw new NttBadRequestException(ex.getLocalizedMessage());
         }catch(Exception ex){

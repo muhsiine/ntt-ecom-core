@@ -93,11 +93,12 @@ public class CityCtrl {
             @ApiResponse(responseCode = "404", description = "Not Found", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
             @ApiResponse(responseCode = "500", description = "Bad GATEWAY", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
-    @PostMapping("/delete/{city_id}")
-    public void removeCity(@PathVariable(name = "city_id") Long city_id) throws Exception {
+    @DeleteMapping("/delete/{city_id}")
+    public ResponseEntity<Void> deleteCity(@PathVariable(name = "city_id") Long city_id) throws Exception {
         log.trace("{}", city_id);
         try{
             citySrv.deleteCity(city_id);
+            return ResponseEntity.noContent().build();
         }catch(RuntimeException ex){
             throw new NttBadRequestException(ex.getLocalizedMessage());
         }catch(Exception ex){
