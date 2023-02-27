@@ -93,11 +93,12 @@ public class CountryCtrl {
             @ApiResponse(responseCode = "404", description = "Not Found", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
             @ApiResponse(responseCode = "500", description = "Bad GATEWAY", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
-    @PostMapping("/delete/{country_id}")
-    public void removeCountry(@PathVariable(name = "country_id") Long country_id) throws Exception {
+    @DeleteMapping("/delete/{country_id}")
+    public ResponseEntity<Void> deleteCountry(@PathVariable(name = "country_id") Long country_id) throws Exception {
         log.trace("{}", country_id);
         try{
             countrySrv.deleteCountry(country_id);
+            return ResponseEntity.noContent().build();
         }catch(RuntimeException ex){
             throw new NttBadRequestException(ex.getLocalizedMessage());
         }catch(Exception ex){

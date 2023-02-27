@@ -109,11 +109,12 @@ public class ProductImageCtrl {
             @ApiResponse(responseCode = "404", description = "Not Found", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
             @ApiResponse(responseCode = "500", description = "Bad GATEWAY", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
-    @PostMapping("/delete/{productImg_id}")
-    public void removeProductImage(@PathVariable(name = "productImg_id") Long productImg_id) throws Exception {
+    @DeleteMapping("/delete/{productImg_id}")
+    public ResponseEntity<Void> deleteProductImage(@PathVariable(name = "productImg_id") Long productImg_id) throws Exception {
         log.trace("{}", productImg_id);
         try{
             productImageSrv.deleteProductImage(productImg_id);
+            return ResponseEntity.noContent().build();
         }catch(RuntimeException ex){
             throw new NttBadRequestException(ex.getLocalizedMessage());
         }catch(Exception ex){

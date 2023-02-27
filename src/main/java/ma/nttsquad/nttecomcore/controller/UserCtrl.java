@@ -94,11 +94,12 @@ public class UserCtrl {
             @ApiResponse(responseCode = "404", description = "Not Found", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
             @ApiResponse(responseCode = "500", description = "Bad GATEWAY", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
-    @PostMapping("/delete/{user_id}")
-    public void removeUser(@PathVariable(name = "user_id") Long user_id) throws Exception {
+    @DeleteMapping("/delete/{user_id}")
+    public ResponseEntity<Void> deleteUser(@PathVariable(name = "user_id") Long user_id) throws Exception {
         log.trace("{}", user_id);
         try{
             userSrv.deleteUser(user_id);
+            return ResponseEntity.noContent().build();
         }catch(RuntimeException ex){
             throw new NttBadRequestException(ex.getLocalizedMessage());
         }catch(Exception ex){

@@ -92,11 +92,12 @@ public class CartItemCtrl {
             @ApiResponse(responseCode = "404", description = "Not Found", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
             @ApiResponse(responseCode = "500", description = "Bad GATEWAY", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
-    @PostMapping("/delete/{cartItem_id}")
-    public void removeCartItem(@PathVariable(name = "cartItem_id") Long cartItem_id) throws Exception {
+    @DeleteMapping("/delete/{cartItem_id}")
+    public ResponseEntity<Void> deleteCartItem(@PathVariable(name = "cartItem_id") Long cartItem_id) throws Exception {
         log.trace("{}", cartItem_id);
         try{
             cartItemSrv.deleteCartItem(cartItem_id);
+            return ResponseEntity.noContent().build();
         }catch(RuntimeException ex){
             throw new NttBadRequestException(ex.getLocalizedMessage());
         }catch(Exception ex){

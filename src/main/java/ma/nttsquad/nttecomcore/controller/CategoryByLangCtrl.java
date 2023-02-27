@@ -12,6 +12,7 @@ import ma.nttsquad.nttecomcore.dto.CategoryDto;
 import ma.nttsquad.nttecomcore.exception.NttBadRequestException;
 import ma.nttsquad.nttecomcore.exception.records.ErrorResponse;
 import ma.nttsquad.nttecomcore.service.CategoryByLangSrv;
+import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -92,11 +93,12 @@ public class CategoryByLangCtrl {
             @ApiResponse(responseCode = "404", description = "Not Found", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
             @ApiResponse(responseCode = "500", description = "Bad GATEWAY", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
-    @PostMapping("/delete/{category_id}")
-    public void removeCategoryByLang(@PathVariable(name = "category_id") Long category_id) throws Exception {
+    @DeleteMapping("/delete/{category_id}")
+    public ResponseEntity<Void> deleteCategoryByLang(@PathVariable(name = "category_id") Long category_id) throws Exception {
         log.trace("{}", category_id);
         try{
             categoryByLangSrv.deleteCategoryByLang(category_id);
+            return ResponseEntity.noContent().build();
         }catch(RuntimeException ex){
             throw new NttBadRequestException(ex.getLocalizedMessage());
         }catch(Exception ex){

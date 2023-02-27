@@ -86,8 +86,8 @@ public class CurrencyCtrl {
             @ApiResponse(responseCode = "500", description = "Bad GATEWAY", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<?> deleteCurrency(@PathVariable Long id){
+    public ResponseEntity<Void> deleteCurrency(@PathVariable Long id){
         currencySrv.deleteCurrency(id);
-        return new ResponseEntity<>("Currency has been deleted successfully",HttpStatus.OK);
+        return ResponseEntity.noContent().build();
     }
 }
